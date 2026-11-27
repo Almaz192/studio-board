@@ -172,8 +172,8 @@
    "type": "Оформление",
    "prio": 2,
    "due": "2026-12-01",
-   "status": "todo",
-   "order": 7,
+   "status": "done",
+   "order": 1,
    "created": "2026-11-26",
    "by": "almaz",
    "comments": []
