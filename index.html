@@ -144,7 +144,7 @@ textarea.inp{min-height:84px;resize:vertical}
 <header class="top band">
 <div class="brand"><span class="rec" aria-hidden="true"></span><h1>Доска студии</h1></div>
 <nav class="tabs" aria-label="Разделы"><button data-act="view" data-view="board">Доска задач</button><button data-act="view" data-view="team">Команда и роли</button></nav>
-<div class="right"><span id="sync">Подключаюсь…</span><button class="btn" id="meBtn" data-act="me">Кто я?</button><button class="btn" id="ghBtn" data-act="gh" hidden>Подключить</button><button class="btn" data-act="channels">Каналы</button><button class="btn primary" data-act="new">+ Новая задача</button></div>
+<div class="right"><span id="sync">Подключаюсь…</span><button class="btn" id="meBtn" data-act="me">Кто я?</button><button class="btn" data-act="channels">Каналы</button><button class="btn primary" data-act="new">+ Новая задача</button></div>
 </header>
 <div id="tools"><div class="people band" id="people"></div>
 <div class="filters band"><input id="q" type="search" placeholder="Поиск по задачам" aria-label="Поиск по задачам"><div id="chips"></div></div></div>
@@ -155,14 +155,21 @@ textarea.inp{min-height:84px;resize:vertical}
 <div id="toast" role="status"></div>
 
 <script type="application/json" id="seed">{"people": [{"id": "almaz", "name": "Almaz", "color": "#e5202e", "role": "Продюсер, руководитель", "duties": "Стратегия и контент-план трёх каналов. Раздаёт задачи, принимает готовые ролики, следит за сроками и статистикой."}, {"id": "almanbet", "name": "Almanbet", "color": "#2357ff", "role": "Монтажёр", "duties": "Монтаж роликов и Shorts, звук, цветокоррекция, шаблоны интро и титров, музыка без претензий по авторским правам."}, {"id": "said", "name": "Said", "color": "#00a862", "role": "Сценарист и ресёрч", "duties": "Ищет идеи и тренды, разбирает конкурентов, пишет сценарии и тексты для озвучки, готовит материалы к съёмке."}, {"id": "emir", "name": "Emir", "color": "#8a4dff", "role": "Дизайн и продвижение", "duties": "Оформление каналов, превью, названия, описания и теги (SEO), публикация по графику, ответы на комментарии."}], "channels": [{"id": "history", "name": "History", "color": "#b86e00", "niche": "Unique History и Unique Humans: необычные факты из истории и необычные люди, о которых мало кто знает."}, {"id": "whatif", "name": "What If", "color": "#6b5bff", "niche": "Творческие ситуации «что если…». Ролики про нации и регионы: «Every US citizen does…», «Every person from Siberia does…». Рубрика Numbers on Head."}, {"id": "gens", "name": "Generations", "color": "#00a3c4", "niche": "Сравнение поколений: Alpha vs Z, бумеры, миллениалы. Health: почему темнеет в глазах, когда встаёшь, и как это исправить. Рубрика That's Why."}], "flow": [{"step": "Идея и ресёрч", "who": "said"}, {"step": "Сценарий", "who": "said"}, {"step": "Монтаж и звук", "who": "almanbet"}, {"step": "Превью и SEO", "who": "emir"}, {"step": "Проверка и публикация", "who": "almaz"}], "tasks": [{"id": "s1", "title": "Выбрать стилистику канала History", "desc": "Решить, как выглядит и звучит канал: цвета, шрифты, тип картинок, голос, музыка, темп монтажа. Итог: одна страница с примерами, по ней Emir делает оформление, Almanbet превью и монтаж. Идеи для старта: старые карты и гравюры, тёплая сепия, пергамент, шрифт с засечками, спокойный голос рассказчика.", "who": "almaz", "ch": "history", "type": "Стратегия", "prio": 3, "due": "2026-11-28", "status": "doing", "order": 1, "created": "2026-11-26", "by": "almaz", "comments": []}, {"id": "s2", "title": "Выбрать стилистику канала What If", "desc": "Решить, как выглядит и звучит канал: цвета, шрифты, тип картинок, голос, музыка, темп монтажа. Итог: одна страница с примерами, по ней Emir делает оформление, Almanbet превью и монтаж. Идеи для старта: яркая мультяшная графика, флаги и карты, большие цифры на экране, быстрый темп, контрастные превью.", "who": "almaz", "ch": "whatif", "type": "Стратегия", "prio": 3, "due": "2026-11-28", "status": "doing", "order": 2, "created": "2026-11-26", "by": "almaz", "comments": []}, {"id": "s3", "title": "Выбрать стилистику канала Generations", "desc": "Решить, как выглядит и звучит канал: цвета, шрифты, тип картинок, голос, музыка, темп монтажа. Итог: одна страница с примерами, по ней Emir делает оформление, Almanbet превью и монтаж. Идеи для старта: чистая инфографика, экран делится пополам для сравнения поколений, отдельная спокойная палитра для Health, понятные схемы.", "who": "almaz", "ch": "gens", "type": "Стратегия", "prio": 3, "due": "2026-11-28", "status": "doing", "order": 3, "created": "2026-11-26", "by": "almaz", "comments": []}, {"id": "s4", "title": "Создать и активировать канал History", "desc": "Зарегистрировать канал на общий рабочий Google-аккаунт, придумать @handle. Активировать: подтвердить по телефону (чтобы открылись длинные видео и свои превью), заполнить описание, ключевые слова, ссылки, выбрать страну и язык. Доступы выдать команде.", "who": "almaz", "ch": "history", "type": "Настройка", "prio": 3, "due": "2026-11-29", "status": "todo", "order": 4, "created": "2026-11-26", "by": "almaz", "comments": []}, {"id": "s5", "title": "Создать и активировать канал What If", "desc": "Зарегистрировать канал на общий рабочий Google-аккаунт, придумать @handle. Активировать: подтвердить по телефону (чтобы открылись длинные видео и свои превью), заполнить описание, ключевые слова, ссылки, выбрать страну и язык. Доступы выдать команде.", "who": "almaz", "ch": "whatif", "type": "Настройка", "prio": 3, "due": "2026-11-29", "status": "todo", "order": 5, "created": "2026-11-26", "by": "almaz", "comments": []}, {"id": "s6", "title": "Создать и активировать канал Generations", "desc": "Зарегистрировать канал на общий рабочий Google-аккаунт, придумать @handle. Активировать: подтвердить по телефону (чтобы открылись длинные видео и свои превью), заполнить описание, ключевые слова, ссылки, выбрать страну и язык. Доступы выдать команде.", "who": "almaz", "ch": "gens", "type": "Настройка", "prio": 3, "due": "2026-11-29", "status": "todo", "order": 6, "created": "2026-11-26", "by": "almaz", "comments": []}, {"id": "s7", "title": "Аватарка для канала History", "desc": "Сделать по стилистике канала. 800×800, хорошо читается в маленьком кружке. 2–3 варианта на выбор.", "who": "emir", "ch": "history", "type": "Оформление", "prio": 2, "due": "2026-12-01", "status": "todo", "order": 7, "created": "2026-11-26", "by": "almaz", "comments": []}, {"id": "s8", "title": "Шапка для канала History", "desc": "Баннер 2560×1440, всё важное в безопасной зоне 1546×423 по центру. Название канала и о чём он в одну строку.", "who": "emir", "ch": "history", "type": "Оформление", "prio": 2, "due": "2026-12-02", "status": "todo", "order": 8, "created": "2026-11-26", "by": "almaz", "comments": []}, {"id": "s9", "title": "Аватарка для канала What If", "desc": "Сделать по стилистике канала. 800×800, хорошо читается в маленьком кружке. 2–3 варианта на выбор.", "who": "emir", "ch": "whatif", "type": "Оформление", "prio": 2, "due": "2026-12-01", "status": "todo", "order": 9, "created": "2026-11-26", "by": "almaz", "comments": []}, {"id": "s10", "title": "Шапка для канала What If", "desc": "Баннер 2560×1440, всё важное в безопасной зоне 1546×423 по центру. Название канала и о чём он в одну строку.", "who": "emir", "ch": "whatif", "type": "Оформление", "prio": 2, "due": "2026-12-02", "status": "todo", "order": 10, "created": "2026-11-26", "by": "almaz", "comments": []}, {"id": "s11", "title": "Аватарка для канала Generations", "desc": "Сделать по стилистике канала. 800×800, хорошо читается в маленьком кружке. 2–3 варианта на выбор.", "who": "emir", "ch": "gens", "type": "Оформление", "prio": 2, "due": "2026-12-01", "status": "todo", "order": 11, "created": "2026-11-26", "by": "almaz", "comments": []}, {"id": "s12", "title": "Шапка для канала Generations", "desc": "Баннер 2560×1440, всё важное в безопасной зоне 1546×423 по центру. Название канала и о чём он в одну строку.", "who": "emir", "ch": "gens", "type": "Оформление", "prio": 2, "due": "2026-12-02", "status": "todo", "order": 12, "created": "2026-11-26", "by": "almaz", "comments": []}, {"id": "s13", "title": "Шаблон превью для канала History", "desc": "Шаблон 1280×720 по стилистике канала: место под крупный текст в 2–4 слова, главный объект, единые цвета. Сделать 3 пробных превью на первые темы.", "who": "almanbet", "ch": "history", "type": "Превью", "prio": 2, "due": "2026-12-03", "status": "todo", "order": 13, "created": "2026-11-26", "by": "almaz", "comments": []}, {"id": "s14", "title": "Шаблон превью для канала What If", "desc": "Шаблон 1280×720 по стилистике канала: место под крупный текст в 2–4 слова, главный объект, единые цвета. Сделать 3 пробных превью на первые темы.", "who": "almanbet", "ch": "whatif", "type": "Превью", "prio": 2, "due": "2026-12-03", "status": "todo", "order": 14, "created": "2026-11-26", "by": "almaz", "comments": []}, {"id": "s15", "title": "Шаблон превью для канала Generations", "desc": "Шаблон 1280×720 по стилистике канала: место под крупный текст в 2–4 слова, главный объект, единые цвета. Сделать 3 пробных превью на первые темы.", "who": "almanbet", "ch": "gens", "type": "Превью", "prio": 2, "due": "2026-12-03", "status": "todo", "order": 15, "created": "2026-11-26", "by": "almaz", "comments": []}, {"id": "s16", "title": "Подобрать связку инструментов для видео", "desc": "Claude пишет сценарии, тексты для озвучки, промпты для картинок, названия и описания. Озвучку, картинки или видеоряд и сборку делают другие сервисы. Сравнить варианты по цене и качеству и предложить одну связку на всю команду.", "who": "said", "ch": "", "type": "ИИ", "prio": 3, "due": "2026-11-29", "status": "todo", "order": 16, "created": "2026-11-26", "by": "almaz", "comments": []}, {"id": "s17", "title": "Настроить Claude под канал History", "desc": "Создать в Claude отдельный проект для канала. В инструкции: ниша и рубрики канала, стилистика, формат сценария (хук в первые 15 секунд, длина, тон), что выдавать на выходе: сценарий, текст озвучки, список кадров с промптами для картинок, название, описание, теги. Прогнать 3 пробные темы и поправить инструкцию.", "who": "said", "ch": "history", "type": "ИИ", "prio": 3, "due": "2026-12-02", "status": "todo", "order": 17, "created": "2026-11-26", "by": "almaz", "comments": []}, {"id": "s18", "title": "Настроить Claude под канал What If", "desc": "Создать в Claude отдельный проект для канала. В инструкции: ниша и рубрики канала, стилистика, формат сценария (хук в первые 15 секунд, длина, тон), что выдавать на выходе: сценарий, текст озвучки, список кадров с промптами для картинок, название, описание, теги. Прогнать 3 пробные темы и поправить инструкцию.", "who": "said", "ch": "whatif", "type": "ИИ", "prio": 3, "due": "2026-12-02", "status": "todo", "order": 18, "created": "2026-11-26", "by": "almaz", "comments": []}, {"id": "s19", "title": "Настроить Claude под канал Generations", "desc": "Создать в Claude отдельный проект для канала. В инструкции: ниша и рубрики канала, стилистика, формат сценария (хук в первые 15 секунд, длина, тон), что выдавать на выходе: сценарий, текст озвучки, список кадров с промптами для картинок, название, описание, теги. Прогнать 3 пробные темы и поправить инструкцию.", "who": "said", "ch": "gens", "type": "ИИ", "prio": 3, "due": "2026-12-02", "status": "todo", "order": 19, "created": "2026-11-26", "by": "almaz", "comments": []}, {"id": "s20", "title": "Шаблон монтажа для видео по сценариям из Claude", "desc": "Шаблон проекта на каждый канал: интро, титры, звук, музыка, переходы. Чтобы из сценария, озвучки и картинок ролик собирался быстро.", "who": "almanbet", "ch": "", "type": "Монтаж", "prio": 2, "due": "2026-12-04", "status": "todo", "order": 20, "created": "2026-11-26", "by": "almaz", "comments": []}], "v": 2}</script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
 <script>
 /* ==== НАСТРОЙКА ====================================================
-   Ничего менять не нужно, если сайт открыт по адресу вида
-   https://ИМЯ.github.io/РЕПОЗИТОРИЙ/ : репозиторий определится сам.
-   Для своего домена впишите: const REPO = {owner:"ИМЯ", repo:"РЕПОЗИТОРИЙ"};
-   Задачи хранятся в файле data.json в ветке data этого репозитория.
+   Задачи хранятся в бесплатной базе Google Firebase (Firestore).
+   Настройки ниже не секретные: так и задумано, их можно держать в коде.
 ================================================================== */
-const REPO = null;
+const FIREBASE_CONFIG = {
+  apiKey: "AIzaSyB-EzaX7Aums9XBgJHcqfeT-dH7oVnPvvs",
+  authDomain: "studio-board-ee2d2.firebaseapp.com",
+  projectId: "studio-board-ee2d2",
+  storageBucket: "studio-board-ee2d2.firebasestorage.app",
+  messagingSenderId: "197367362452",
+  appId: "1:197367362452:web:4c07e31b48ef046b089581"
+};
 {
 const SEED=JSON.parse(document.getElementById('seed').textContent);
 let S={seedV:SEED.v,people:SEED.people,channels:SEED.channels,flow:SEED.flow,tasks:[]};
@@ -196,56 +203,33 @@ const isHot=t=>t.due&&t.status!=='done'&&days(t.due)<=2;
 const addDays=n=>{const d=new Date();d.setDate(d.getDate()+n);return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`};
 const short=s=>s.length>32?s.slice(0,30)+'…':s;
 function toast(m){const el=$('#toast');el.textContent=m;el.classList.add('on');clearTimeout(toast.t);toast.t=setTimeout(()=>el.classList.remove('on'),2600)}
-function sync(k,msg){const el=$('#sync');el.className=k==='err'?'err':'';el.title=msg||'';el.textContent={ok:'Сохранено в GitHub',pend:'Сохраняю…',local:'Только в этом браузере',load:'Загружаю…',ro:'Только просмотр',err:'Ошибка сохранения'}[k]||''}
+function sync(k,msg){const el=$('#sync');el.className=k==='err'?'err':'';el.title=msg||'';el.textContent={ok:'Сохранено для всех',pend:'Сохраняю…',local:'Только в этом браузере',load:'Загружаю…',ro:'Только просмотр',err:'Нет связи с базой'}[k]||''}
 
-/* ---- хранилище: файл data.json в GitHub-репозитории ---- */
-const API='https://api.github.com',BRANCH='data',FILE='data.json';
-const R=REPO||(location.hostname.endsWith('.github.io')?{owner:location.hostname.split('.')[0],repo:location.pathname.split('/').filter(Boolean)[0]||location.hostname}:null);
-let mode=R?'gh':'local',token=st('studio-token')||'',sha=null,queue=[],busy=false,timer=null,poller=null;
+/* ---- хранилище: Firebase Firestore (общая база, без ключей) ---- */
+const GH_DATA='https://api.github.com/repos/Almaz192/studio-board/contents/data.json?ref=data';
+let mode=(FIREBASE_CONFIG&&window.firebase)?'fb':'local',db=null,metaReady=false,tasksReady=false,migrating=false;
 const fresh=()=>({seedV:SEED.v,people:JSON.parse(JSON.stringify(SEED.people)),channels:JSON.parse(JSON.stringify(SEED.channels)),flow:JSON.parse(JSON.stringify(SEED.flow)),tasks:JSON.parse(JSON.stringify(SEED.tasks))});
-const b64e=s=>{const b=new TextEncoder().encode(s);let x='';for(let i=0;i<b.length;i+=8192)x+=String.fromCharCode.apply(null,b.subarray(i,i+8192));return btoa(x)};
-const b64d=s=>new TextDecoder().decode(Uint8Array.from(atob(s.replace(/\s/g,'')),c=>c.charCodeAt(0)));
-async function gh(path,opt){opt=opt||{};const hd={Accept:'application/vnd.github+json'};if(token)hd.Authorization='Bearer '+token;if(opt.body)hd['Content-Type']='application/json';
- const r=await fetch(API+path,{method:opt.method||'GET',headers:hd,body:opt.body?JSON.stringify(opt.body):undefined,cache:'no-store'});let j=null;try{j=await r.json()}catch(e){}return{ok:r.ok,status:r.status,j}}
-const rp=()=>`/repos/${encodeURIComponent(R.owner)}/${encodeURIComponent(R.repo)}`;
-async function pull(){const r=await gh(`${rp()}/contents/${FILE}?ref=${BRANCH}`);
- if(r.ok)return{sha:r.j.sha,data:JSON.parse(b64d(r.j.content))};
- if(r.status===404)return{sha:null,data:null};
- if(r.status===401)throw new Error('Ключ доступа не подошёл. Нажмите «GitHub» и вставьте новый');
- if(r.status===403)throw new Error('GitHub временно ограничил запросы, подождите пару минут');
- throw new Error('GitHub ответил ошибкой '+r.status)}
-async function ensureBranch(){const b=await gh(`${rp()}/git/ref/heads/${BRANCH}`);if(b.ok)return;
- const repo=await gh(rp());if(!repo.ok)throw new Error('Нет доступа к репозиторию '+R.owner+'/'+R.repo);
- const m=await gh(`${rp()}/git/ref/heads/${encodeURIComponent(repo.j.default_branch)}`);if(!m.ok)throw new Error('В репозитории нет ни одного файла');
- const c=await gh(`${rp()}/git/refs`,{method:'POST',body:{ref:'refs/heads/'+BRANCH,sha:m.j.object.sha}});
- if(!c.ok&&c.status!==422)throw new Error('Ключу не хватает права «Contents: Read and write»')}
-const canEdit=()=>{if(mode==='gh'&&!token){toast('Режим просмотра: нажмите «Подключить» вверху');return false}return true};
-function change(fn,msg){if(!canEdit())return false;fn(S);redraw();if(msg)toast(msg);
+const canEdit=()=>true;
+const metaOf=x=>({seedV:SEED.v,people:x.people,channels:x.channels,flow:x.flow});
+function fail(e){console.error(e);sync('err',String(e&&e.message||e));toast('Не удалось сохранить, проверьте интернет')}
+function change(fn,msg){const before=JSON.parse(JSON.stringify(S));fn(S);redraw();if(msg)toast(msg);
  if(mode==='local'){st('studio-board',S);sync('local');return true}
- queue.push(fn);clearTimeout(timer);sync('pend');timer=setTimeout(flush,700);return true}
-async function flush(){if(busy){timer=setTimeout(flush,500);return}if(!queue.length)return;busy=true;const ops=queue.slice();
- try{for(let i=0;i<4;i++){const cur=await pull();const base=cur.data&&cur.data.tasks?cur.data:fresh();ops.forEach(f=>f(base));base.seedV=SEED.v;
-  if(!cur.sha)await ensureBranch();
-  const body={message:'Доска: '+(me&&P(me)?P(me).name+' обновил(а) задачи':'обновление задач'),content:b64e(JSON.stringify(base,null,1)),branch:BRANCH};if(cur.sha)body.sha=cur.sha;
-  const r=await gh(`${rp()}/contents/${FILE}`,{method:'PUT',body});
-  if(r.ok){sha=r.j.content.sha;queue=queue.slice(ops.length);S=base;queue.forEach(f=>f(S));busy=false;sync(queue.length?'pend':'ok');redraw();if(queue.length)flush();return}
-  if(r.status===409||r.status===422)continue;
-  if(r.status===401)throw new Error('Ключ доступа не подошёл');
-  if(r.status===403||r.status===404)throw new Error('У ключа нет права записи в '+R.owner+'/'+R.repo);
-  throw new Error('GitHub ответил ошибкой '+r.status)}
- throw new Error('Кто-то сохранял одновременно, повторите действие')}
- catch(e){queue=queue.slice(ops.length);sync('err',e.message);toast(e.message)}busy=false}
-async function poll(){if(busy||queue.length||document.hidden||mode!=='gh')return;try{const cur=await pull();if(cur.sha&&cur.sha!==sha){sha=cur.sha;S=cur.data;redraw()}if(!$('#sync').classList.contains('err'))sync(token?'ok':'ro')}catch(e){sync('err',e.message)}}
-function startPoll(){clearInterval(poller);poller=setInterval(poll,token?20000:120000)}
-function startLocal(){const L=st('studio-board');if(L&&L.tasks&&(L.seedV||1)>=SEED.v)S=L;else{S=fresh();if(L&&L.people){S.people=L.people;S.flow=L.flow||S.flow}st('studio-board',S)}
- $('#banner').innerHTML='<b>Локальная копия.</b> Задачи сохраняются только в этом браузере. Общая доска работает, когда сайт открыт по ссылке GitHub Pages.';$('#banner').hidden=false;$('#ghBtn').hidden=true;sync('local');render()}
-async function startGh(){sync('load');S=fresh();render();
- try{const cur=await pull();sha=cur.sha;if(cur.data&&cur.data.tasks)S=cur.data;redraw();sync(token?'ok':'ro');
-  if(token&&!cur.sha)change(()=>{},'Доска создана в репозитории')}
- catch(e){sync('err',e.message)}
- ghUi();startPoll()}
-function ghUi(){$('#ghBtn').hidden=false;$('#ghBtn').textContent=token?'GitHub подключён':'Подключить';
- const b=$('#banner');if(!token){b.innerHTML='<b>Режим просмотра.</b> Чтобы добавлять и менять задачи, нажмите «Подключить» и вставьте ключ доступа. Его даст владелец репозитория.';b.hidden=false}else b.hidden=true}
+ const b=db.batch(),old=new Map(before.tasks.map(t=>[t.id,JSON.stringify(t)])),now=new Set();let n=0;
+ S.tasks.forEach(t=>{now.add(t.id);const j=JSON.stringify(t);if(old.get(t.id)!==j){b.set(db.collection('tasks').doc(t.id),JSON.parse(j));n++}});
+ before.tasks.forEach(t=>{if(!now.has(t.id)){b.delete(db.collection('tasks').doc(t.id));n++}});
+ if(JSON.stringify(metaOf(before))!==JSON.stringify(metaOf(S))){b.set(db.collection('studio').doc('meta'),JSON.parse(JSON.stringify(metaOf(S))));n++}
+ if(n){sync('pend');b.commit().then(()=>sync('ok')).catch(fail)}return true}
+async function migrate(){if(migrating)return;migrating=true;let src=null;
+ try{const r=await fetch(GH_DATA,{headers:{Accept:'application/vnd.github+json'},cache:'no-store'});if(r.ok){const j=await r.json();src=JSON.parse(new TextDecoder().decode(Uint8Array.from(atob(j.content.replace(/\s/g,'')),c=>c.charCodeAt(0))))}}catch(e){}
+ if(!src||!src.tasks)src=fresh();
+ const b=db.batch();b.set(db.collection('studio').doc('meta'),metaOf(src));src.tasks.forEach(t=>b.set(db.collection('tasks').doc(t.id),t));
+ await b.commit().catch(fail)}
+function startFb(){try{firebase.initializeApp(FIREBASE_CONFIG);db=firebase.firestore()}catch(e){console.error(e);mode='local';startLocal();return}
+ sync('load');S=fresh();S.tasks=[];render();
+ db.collection('studio').doc('meta').onSnapshot(s=>{if(!s.exists){migrate();return}const d=s.data();S.people=d.people||[];S.channels=d.channels||[];S.flow=d.flow||[];metaReady=true;redraw()},fail);
+ db.collection('tasks').onSnapshot({includeMetadataChanges:true},q=>{S.tasks=q.docs.map(d=>Object.assign({comments:[]},d.data(),{id:d.id}));tasksReady=true;sync(q.metadata.hasPendingWrites?'pend':'ok');redraw()},fail)}
+function startLocal(){const L=st('studio-board');if(L&&L.tasks&&(L.seedV||1)>=SEED.v)S=L;else{S=fresh();st('studio-board',S)}
+ $('#banner').innerHTML='<b>База не подключена.</b> Задачи сохраняются только в этом браузере.';$('#banner').hidden=false;sync('local');render()}
 function redraw(){const ae=document.activeElement;if(UI.view==='team'&&ae&&ae.closest&&ae.closest('#team')){dirtyTeam=true;renderBoardSide();return}render();
  const f=$('#tf');if(f&&f.dataset.id&&!$('#modal').hidden){const t=T(f.dataset.id);if(t)refreshComments(t)}}
 function renderBoardSide(){const m=P(me);$('#meBtn').innerHTML=m?`${av(m)}<span>${esc(m.name)}</span>`:'Кто я?'}
@@ -309,10 +293,6 @@ function pickMe(){modal(`<div class="wrap"><div class="mh"><h2>Кто ты?</h2>
 function drawCh(){$('#chl').innerHTML=CH.map((c,i)=>`<div class="chrow"><button type="button" class="sw" style="--c:${col(c.color)}" data-act="sw" data-i="${i}" aria-label="Сменить цвет канала"></button><input class="inp" data-chn="${i}" value="${esc(c.name)}" aria-label="Название канала"><button type="button" class="btn" data-act="chdel" data-i="${i}">Убрать</button><textarea class="inp chniche" data-chniche="${i}" placeholder="Ниша и рубрики канала" aria-label="Ниша канала">${esc(c.niche||'')}</textarea></div>`).join('')||'<p class="sub">Каналов пока нет</p>'}
 function openChannels(){CH=S.channels.map(c=>Object.assign({},c));modal(`<div class="wrap"><div class="mh"><h2>Каналы</h2><button class="x" data-act="close" aria-label="Закрыть">×</button></div><p class="sub">Впишите названия, когда придумаете. Цвет меняется нажатием на квадрат. Задачи убранного канала станут общими.</p><div id="chl" class="cm"></div><div><button class="btn" data-act="chadd">+ Добавить канал</button></div><div class="acts"><button class="btn primary" data-act="chsave">Сохранить</button><button class="btn" data-act="close">Отмена</button></div></div>`);drawCh()}
 
-function openConnect(){modal(`<div class="wrap"><div class="mh"><h2>Подключить к GitHub</h2><button class="x" data-act="close" aria-label="Закрыть">×</button></div>
-<p class="sub">Задачи хранятся в файле ${esc(FILE)} в репозитории <b>${esc(R.owner)}/${esc(R.repo)}</b>, в отдельной ветке ${esc(BRANCH)}. Чтобы менять их с этого устройства, вставьте ключ доступа GitHub. Он сохранится только в этом браузере.</p>
-<label>Ключ доступа<input class="inp" id="tok" type="password" autocomplete="off" spellcheck="false" placeholder="github_pat_…"></label>
-<div class="acts"><button class="btn primary" data-act="tokSave">Подключить</button>${token?'<button class="btn" data-act="tokDel">Отключить этот браузер</button>':''}</div><p class="sub" id="tokMsg" role="status"></p></div>`)}
 const maxOrderIn=(x,s,ex)=>Math.max(0,...x.tasks.filter(t=>t.status===s&&t.id!==ex).map(t=>t.order||0));
 const clone=o=>JSON.parse(JSON.stringify(o));
 
@@ -332,13 +312,6 @@ else if(a==='due'){const d=b.dataset.d;$('#f-due').value=d===''?'':addDays(+d)}
 else if(a==='close')close();
 else if(a==='me')pickMe();
 else if(a==='setme'){me=id;st('studio-me',id);close();render();toast('Привет, '+P(id).name)}
-else if(a==='gh')openConnect();
-else if(a==='tokSave'){const v=g('tok').trim(),msg=$('#tokMsg');if(!v){msg.textContent='Вставьте ключ';return}
- msg.textContent='Проверяю…';const old=token;token=v;const r=await gh(rp());
- if(!r.ok){token=old;msg.textContent=r.status===401?'Ключ не подошёл. Проверьте, что скопировали его целиком.':'Ключ не видит репозиторий '+R.owner+'/'+R.repo+'. При создании ключа выберите этот репозиторий.';return}
- st('studio-token',v);close();ghUi();startPoll();toast('GitHub подключён');
- try{const cur=await pull();sha=cur.sha;if(cur.data&&cur.data.tasks)S=cur.data;redraw();sync('ok');if(!cur.sha)change(()=>{},'Доска создана в репозитории')}catch(err){sync('err',err.message)}}
-else if(a==='tokDel'){token='';try{localStorage.removeItem('studio-token')}catch(err){}close();ghUi();startPoll();sync('ro');toast('Этот браузер отключён от GitHub')}
 else if(a==='channels'){if(canEdit())openChannels()}
 else if(a==='chadd'){CH.push({id:'c'+Date.now().toString(36),name:'Канал '+(CH.length+1),color:PAL[CH.length%PAL.length],niche:''});drawCh()}
 else if(a==='chdel'){CH.splice(+b.dataset.i,1);drawCh()}
@@ -361,7 +334,6 @@ else if(d.flow){const i=+d.flow;change(x=>{if(x.flow[i])x.flow[i].who=v},'Отв
 document.addEventListener('focusout',e=>{if(dirtyTeam&&e.target.closest&&e.target.closest('#team'))setTimeout(()=>{const ae=document.activeElement;if(!(ae&&ae.closest&&ae.closest('#team input,#team textarea,#team select')))render()},50)});
 document.addEventListener('input',e=>{if(e.target.id==='q'){UI.q=e.target.value;saveUI();renderBoard()}else if(e.target.dataset.chn&&CH)CH[+e.target.dataset.chn].name=e.target.value;else if(e.target.dataset.chniche&&CH)CH[+e.target.dataset.chniche].niche=e.target.value});
 document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!$('#modal').hidden&&me)close();else if(e.key==='Enter'&&e.target.classList&&e.target.classList.contains('card'))openTask(e.target.dataset.id)});
-document.addEventListener('visibilitychange',()=>{if(!document.hidden)poll()});
 const bd=$('#board');
 bd.addEventListener('dragstart',e=>{const c=e.target.closest('.card');if(!c)return;e.dataTransfer.setData('text/plain',c.dataset.id);e.dataTransfer.effectAllowed='move';c.classList.add('drag')});
 bd.addEventListener('dragend',e=>{const c=e.target.closest('.card');if(c)c.classList.remove('drag');document.querySelectorAll('.col.over').forEach(x=>x.classList.remove('over'))});
@@ -373,7 +345,7 @@ const moved=t.status!==s;change(x=>{const k=x.tasks.find(k=>k.id===id);if(k){k.s
 
 /* ---- запуск ---- */
 render();
-if(mode==='gh')startGh();else startLocal();
+if(mode==='fb')startFb();else startLocal();
 if(!me||!P(me))pickMe();
 }
 </script>
