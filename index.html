@@ -124,9 +124,11 @@ textarea.inp{min-height:84px;resize:vertical}
 #toast{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:12px;font-size:14px;opacity:0;pointer-events:none;transition:opacity .2s;z-index:20;max-width:calc(100% - 32px)}
 #toast.on{opacity:1}
 @media(max-width:980px){.steps{grid-template-columns:repeat(auto-fit,minmax(160px,1fr))}}
-@media(max-width:600px){.board{grid-auto-columns:84vw;scroll-snap-type:x mandatory}.grid3{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}.who{grid-template-columns:minmax(0,1fr)}.right{width:100%}.right .primary{margin-left:auto}.tabs{width:100%}.tabs button{flex:1}#sync{width:100%;order:9}}
+@media(max-width:600px){.span2{grid-column:1/-1}.board{grid-auto-columns:84vw;scroll-snap-type:x mandatory}.grid3{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}.who{grid-template-columns:minmax(0,1fr)}.right{width:100%}.right .primary{margin-left:auto}.tabs{width:100%}.tabs button{flex:1}#sync{width:100%;order:9}}
 @media(prefers-reduced-motion:reduce){*{transition:none!important}}
 
+.wait{font-size:13px;color:var(--mute);background:var(--col);border-radius:6px;padding:3px 8px;justify-self:start}
+.span2{grid-column:span 2}
 .presets{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-top:-4px}
 .hotc[aria-pressed=true]{background:var(--red);border-color:var(--red);color:#fff}
 .chrow .chniche{grid-column:1/-1;min-height:64px}
@@ -193,15 +195,18 @@ const av=(p,cls='')=>p?`<span class="av ${cls}" style="--c:${col(p.color)}" titl
 const fd=s=>{if(!s)return'';const[,m,d]=s.split('-').map(Number);return d+' '+MON[m-1]};
 const fdt=s=>{const d=new Date(s);return isNaN(d)?'':`${d.getDate()} ${MON[d.getMonth()]}, ${pad(d.getHours())}:${pad(d.getMinutes())}`};
 const days=s=>Math.round((new Date(s)-new Date(TODAY))/864e5);
-const dueCls=t=>!t.due||t.status==='done'?'':days(t.due)<0?'late':days(t.due)<=1?'soon':'';
+const dueAt=t=>new Date(t.due+'T'+(t.dueTime||'23:59')+':00');
+const late=t=>t.due&&t.status!=='done'&&dueAt(t)<new Date();
+const dueCls=t=>!t.due||t.status==='done'?'':late(t)?'late':days(t.due)<=1?'soon':'';
 const chDot=id=>{const c=C(id);return `<i class="dot" style="--c:${c?col(c.color):'#9aa3b2'}"></i>`};
 const chTag=id=>`<span class="tag">${chDot(id)}${esc(C(id)?C(id).name:'Общее')}</span>`;
 const prio=n=>`<span class="pr p${n}" title="Приоритет: ${PR[n]||''}"><i></i><i></i><i></i></span>`;
-const dueWord=t=>{if(!t.due)return'';const n=days(t.due);if(t.status==='done')return fd(t.due);if(n<0)return'просрочено, '+fd(t.due);if(n===0)return'сегодня';if(n===1)return'завтра';return'до '+fd(t.due)};
+const dueWord=t=>{if(!t.due)return'';const n=days(t.due),tm=t.dueTime?' '+t.dueTime:'';if(t.status==='done')return fd(t.due);if(late(t))return'просрочено, '+fd(t.due)+tm;if(n===0)return'сегодня'+(tm?' до'+tm:'');if(n===1)return'завтра'+(tm?' до'+tm:'');return'до '+fd(t.due)+tm};
 const dueTxt=t=>t.due?`<span class="due ${dueCls(t)}">${esc(dueWord(t))}</span>`:'';
 const isHot=t=>t.due&&t.status!=='done'&&days(t.due)<=2;
 const addDays=n=>{const d=new Date();d.setDate(d.getDate()+n);return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`};
 const short=s=>s.length>32?s.slice(0,30)+'…':s;
+const blocker=t=>{if(!t.after)return null;const b=T(t.after);return b&&b.status!=='done'?b:null};
 function toast(m){const el=$('#toast');el.textContent=m;el.classList.add('on');clearTimeout(toast.t);toast.t=setTimeout(()=>el.classList.remove('on'),2600)}
 function sync(k,msg){const el=$('#sync');el.className=k==='err'?'err':'';el.title=msg||'';el.textContent={ok:'Сохранено для всех',pend:'Сохраняю…',local:'Только в этом браузере',load:'Загружаю…',ro:'Только просмотр',err:'Нет связи с базой'}[k]||''}
 
@@ -237,7 +242,7 @@ function renderBoardSide(){const m=P(me);$('#meBtn').innerHTML=m?`${av(m)}<span>
 /* ---- отрисовка ---- */
 function match(t){const q=UI.q.trim().toLowerCase();return(!UI.hot||isHot(t))&&(!UI.who||t.who===UI.who)&&(UI.ch==='*'||t.ch===UI.ch)&&(!q||(t.title+' '+(t.desc||'')).toLowerCase().includes(q))}
 function card(t){const p=P(t.who),n=(t.comments||[]).length;
-return `<article class="card${t.status==='done'?' done':''}" draggable="true" tabindex="0" data-id="${esc(t.id)}"><div class="meta">${chTag(t.ch)}<span>${esc(t.type)}</span>${prio(t.prio)}</div><h3>${esc(t.title)}</h3><div class="foot">${av(p)}<span>${esc(p?p.name:'Не назначено')}</span>${n?`<span>${n} комм.</span>`:''}${dueTxt(t)}</div></article>`}
+return `<article class="card${t.status==='done'?' done':''}" draggable="true" tabindex="0" data-id="${esc(t.id)}"><div class="meta">${chTag(t.ch)}<span>${esc(t.type)}</span>${prio(t.prio)}</div><h3>${esc(t.title)}</h3>${(()=>{const b=blocker(t);return b?`<div class="wait">После: ${esc(short(b.title))}</div>`:''})()}<div class="foot">${av(p)}<span>${esc(p?p.name:'Не назначено')}</span>${n?`<span>${n} комм.</span>`:''}${dueTxt(t)}</div></article>`}
 function renderBoard(){$('#board').innerHTML=COLS.map(([k,name,c])=>{const ts=S.tasks.filter(t=>t.status===k&&match(t)).sort((a,b)=>a.order-b.order);
 return `<section class="col" data-col="${k}"><div class="colh"><i class="st" style="--c:${c}"></i><h2>${name}</h2><span class="cnt">${ts.length}</span><button class="add" data-act="new" data-st="${k}" aria-label="Добавить задачу в колонку ${name}">+</button></div>${ts.map(card).join('')||'<div class="empty">Перетащите сюда задачу</div>'}</section>`}).join('')}
 function renderPeople(){const n=S.people.length;
@@ -250,13 +255,13 @@ function renderTeam(){
 const flow=`<section class="flow"><h2>Как ролик проходит через команду</h2><p class="sub">У каждого этапа есть ответственный. Договоритесь иначе — поменяйте здесь.</p><div class="steps">${S.flow.map((f,i)=>`<div class="step"><div class="sh">${av(P(f.who),'lg')}<span>${esc(f.step)}</span></div><select class="inp" data-flow="${i}" aria-label="Ответственный: ${esc(f.step)}">${S.people.map(p=>`<option value="${esc(p.id)}"${p.id===f.who?' selected':''}>${esc(p.name)}</option>`).join('')}</select></div>`).join('')}</div></section>`;
 const cards=S.people.map(p=>{const mine=S.tasks.filter(t=>t.who===p.id),cnt=COLS.map(([k])=>mine.filter(t=>t.status===k).length),tot=mine.length||1,open=mine.filter(t=>t.status!=='done').sort((a,b)=>(a.due||'9')<(b.due||'9')?-1:1);
 return `<section class="pcard"><div class="ph">${av(p,'xl')}<div><b>${esc(p.name)}${p.id===me?' (я)':''}</b><span class="sub">${mine.length} ${plural(mine.length,['задача','задачи','задач'])}, открыто ${open.length}</span></div></div>
-<label>Роль<input class="inp" data-role="${esc(p.id)}" value="${esc(p.role)}"></label>
+<label>Роли<input class="inp" data-role="${esc(p.id)}" value="${esc(p.role)}"></label>
 <label>Зона ответственности<textarea class="inp" data-duties="${esc(p.id)}">${esc(p.duties)}</textarea></label>
 <div><div class="bar">${COLS.map(([,,c],i)=>cnt[i]?`<i style="--c:${c};width:${cnt[i]/tot*100}%"></i>`:'').join('')}</div><div class="legend">${COLS.map(([,n,c],i)=>`<span><i class="st" style="--c:${c}"></i>${n}: ${cnt[i]}</span>`).join('')}</div></div>
 <ul class="olist">${open.slice(0,6).map(t=>`<li><button data-act="open" data-id="${esc(t.id)}">${chDot(t.ch)}<span>${esc(t.title)}</span>${dueTxt(t)}</button></li>`).join('')||'<li class="sub">Открытых задач нет</li>'}</ul>
 <button class="btn" data-act="new" data-who="${esc(p.id)}">+ Дать задачу</button></section>`}).join('');
 const chs=`<section><h2>Каналы и ниши</h2><div class="cgrid">${S.channels.map(c=>{const ts=S.tasks.filter(t=>t.ch===c.id),dn=ts.filter(t=>t.status==='done').length;return `<div class="ccard" style="--c:${col(c.color)}"><div class="sh"><i class="dot"></i><b>${esc(c.name)}</b><span class="sub" style="margin-left:auto">${dn} из ${ts.length} готово</span></div><div class="bar"><i style="--c:${col(c.color)};width:${ts.length?dn/ts.length*100:0}%"></i></div><p>${esc(c.niche||'Ниша не описана')}</p></div>`}).join('')}</div><p class="sub" style="margin-top:8px">Названия и ниши меняются кнопкой «Каналы» вверху.</p></section>`;
-$('#team').innerHTML=chs+flow+`<div class="pgrid">${cards}</div>`}
+$('#team').innerHTML=chs+flow+`<section><h2>Люди и задачи</h2><p class="sub" style="margin-bottom:12px">У каждого может быть несколько ролей: задачу можно дать любому, а роли ниже показывают, кто за что отвечает в первую очередь.</p><div class="pgrid">${cards}</div></section>`}
 function render(){document.querySelectorAll('.tabs button').forEach(b=>b.setAttribute('aria-selected',b.dataset.view===UI.view));
 const b=UI.view==='board';$('#board').hidden=!b;$('#tools').hidden=!b;$('#note').hidden=!b;$('#team').hidden=b;
 if(b){renderPeople();renderChips();renderBoard()}else renderTeam();dirtyTeam=false;renderBoardSide();
@@ -280,7 +285,9 @@ modal(`<form id="tf" data-id="${esc(t.id)}"><div class="mh"><h2>${id?'Задач
 <label>Тип<select class="inp" id="f-type">${opt(TYPES.map(x=>[x,x]),t.type)}</select></label>
 <label>Статус<select class="inp" id="f-st">${opt(COLS,t.status)}</select></label>
 <label>Приоритет<select class="inp" id="f-pr">${opt([[3,'Высокий'],[2,'Средний'],[1,'Низкий']],t.prio)}</select></label>
-<label>Дедлайн<input class="inp" type="date" id="f-due" value="${esc(t.due)}"></label></div>
+<label>Дедлайн<input class="inp" type="date" id="f-due" value="${esc(t.due)}"></label>
+<label>Время<input class="inp" type="time" id="f-time" value="${esc(t.dueTime||'')}"></label>
+<label class="span2">Начать после задачи<select class="inp" id="f-after">${opt([['','Можно начинать сразу'],...S.tasks.filter(x=>x.id!==t.id).sort((a,b)=>a.title.localeCompare(b.title)).map(x=>[x.id,x.title])],t.after||'')}</select></label></div>
 <div class="presets" role="group" aria-label="Быстрый дедлайн"><span class="sub">Срок:</span>${[[0,'Сегодня'],[1,'Завтра'],[3,'Через 3 дня'],[7,'Через неделю'],[14,'Через 2 недели'],['','Без срока']].map(([d,n])=>`<button type="button" class="chip" data-act="due" data-d="${d}">${n}</button>`).join('')}</div>
 ${id?`<div class="cm"><h3>Комментарии</h3><div id="cml" class="cm">${cmHtml(t)}</div>
 <textarea class="inp" id="f-cm" placeholder="Написать комментарий"></textarea><div><button type="button" class="btn" data-act="comment">Отправить комментарий</button></div></div>
@@ -308,7 +315,7 @@ else if(a==='ch'){UI.ch=UI.ch===id&&id!=='*'?'*':id;saveUI();render()}
 else if(a==='hot'){UI.hot=!UI.hot;saveUI();render()}
 else if(a==='new'){if(!canEdit())return;const pre={status:b.dataset.st||'todo'};if(b.dataset.who)pre.who=b.dataset.who;openTask(null,pre)}
 else if(a==='open')openTask(id);
-else if(a==='due'){const d=b.dataset.d;$('#f-due').value=d===''?'':addDays(+d)}
+else if(a==='due'){const d=b.dataset.d;$('#f-due').value=d===''?'':addDays(+d);if(d==='')$('#f-time').value=''}
 else if(a==='close')close();
 else if(a==='me')pickMe();
 else if(a==='setme'){me=id;st('studio-me',id);close();render();toast('Привет, '+P(id).name)}
@@ -325,7 +332,7 @@ else if(a==='del'){if(!canEdit())return;if(!b.dataset.sure){b.dataset.sure='1';b
 });
 document.addEventListener('submit',e=>{if(e.target.id!=='tf')return;e.preventDefault();if(!canEdit())return;
 const id=e.target.dataset.id;if(!g('f-title').trim()){$('#f-title').focus();toast('Впишите название задачи');return}
-const v={title:g('f-title').trim(),desc:g('f-desc').trim(),who:g('f-who'),ch:g('f-ch'),type:g('f-type'),status:g('f-st'),prio:Number(g('f-pr')),due:g('f-due')},nid=id||uid(),by=me||'';
+const v={title:g('f-title').trim(),desc:g('f-desc').trim(),who:g('f-who'),ch:g('f-ch'),type:g('f-type'),status:g('f-st'),prio:Number(g('f-pr')),due:g('f-due'),dueTime:g('f-time')||'',after:g('f-after')||''},nid=id||uid(),by=me||'';
 close();change(x=>{let t=x.tasks.find(t=>t.id===nid);const isNew=!t;if(!t){t={id:nid,comments:[],created:TODAY,by,order:0};x.tasks.push(t)}const ps=t.status;Object.assign(t,v);if(isNew||ps!==t.status)t.order=maxOrderIn(x,t.status,nid)+1},id?'Задача сохранена':'Задача создана')});
 document.addEventListener('change',e=>{const el=e.target,d=el.dataset,v=el.value;
 if(d.role)change(x=>{const p=x.people.find(p=>p.id===d.role);if(p)p.role=v.trim()},'Роль сохранена');
