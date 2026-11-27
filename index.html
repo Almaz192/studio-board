@@ -23,7 +23,8 @@ button{cursor:pointer}
 .brand{display:flex;align-items:center;gap:14px;margin-right:auto}
 .rec{width:14px;height:14px;border-radius:50%;background:var(--red);box-shadow:0 0 0 5px var(--redsoft);flex:none}
 h1{font-size:32px;line-height:1.05;letter-spacing:-.02em;font-weight:800;margin:0}
-.tabs{display:flex;gap:4px;background:var(--col);padding:4px;border-radius:12px}
+.tabs{display:flex;gap:4px;background:var(--col);padding:4px;border-radius:12px;overflow-x:auto;max-width:100%}
+.tabs button{flex:none;white-space:nowrap}
 .tabs button{border:0;background:none;padding:8px 14px;border-radius:9px;min-height:40px;font-weight:600;color:var(--mute)}
 .tabs button[aria-selected=true]{background:var(--card);color:var(--ink);box-shadow:0 1px 3px #0003}
 .right{display:flex;flex-wrap:wrap;align-items:center;gap:8px}
@@ -124,11 +125,49 @@ textarea.inp{min-height:84px;resize:vertical}
 #toast{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 16px;border-radius:12px;font-size:14px;opacity:0;pointer-events:none;transition:opacity .2s;z-index:20;max-width:calc(100% - 32px)}
 #toast.on{opacity:1}
 @media(max-width:980px){.steps{grid-template-columns:repeat(auto-fit,minmax(160px,1fr))}}
-@media(max-width:600px){.span2{grid-column:1/-1}.board{grid-auto-columns:84vw;scroll-snap-type:x mandatory}.grid3{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}.who{grid-template-columns:minmax(0,1fr)}.right{width:100%}.right .primary{margin-left:auto}.tabs{width:100%}.tabs button{flex:1}#sync{width:100%;order:9}}
+@media(max-width:600px){.span2{grid-column:1/-1}.board{grid-auto-columns:84vw;scroll-snap-type:x mandatory}.grid3{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}.who{grid-template-columns:minmax(0,1fr)}.right{width:100%}.right .primary{margin-left:auto}.tabs{width:100%}#sync{width:100%;order:9}}
 @media(prefers-reduced-motion:reduce){*{transition:none!important}}
 
 .wait{font-size:13px;color:var(--mute);background:var(--col);border-radius:6px;padding:3px 8px;justify-self:start}
 .span2{grid-column:span 2}
+.alert{background:var(--red);color:#fff;padding-block:10px;display:flex;flex-direction:column;gap:6px;font-size:15px}
+.alert.calm{background:var(--ink);color:var(--bg)}
+.ap{display:flex;flex-wrap:wrap;align-items:center;gap:6px 10px}
+.ap b{font-weight:800}
+.ap button,.ap .abtn{background:#fff;color:#111;border:0;border-radius:20px;padding:6px 12px;min-height:36px;font-weight:600;font-size:14px;text-decoration:none;display:inline-flex;align-items:center}
+.card.fire{border-color:var(--red);box-shadow:0 0 0 2px var(--red),0 0 16px 2px color-mix(in srgb,var(--red) 50%,transparent);animation:glow 1.6s ease-in-out infinite}
+.card.hot{border-color:#ff8a00;box-shadow:0 0 0 2px #ff8a00,0 0 14px color-mix(in srgb,#ff8a00 40%,transparent)}
+@keyframes glow{50%{box-shadow:0 0 0 2px var(--red),0 0 30px 6px color-mix(in srgb,var(--red) 70%,transparent)}}
+.nudge{font-size:13px;font-weight:800;color:var(--red)}
+.card.hot .nudge{color:#c86a00}
+.calls{padding-block:6px 32px;display:grid;gap:16px}
+.callbox{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.3fr);gap:16px}
+.next{background:var(--ink);color:var(--bg);border-radius:16px;padding:20px;display:grid;gap:6px;align-content:start}
+.next .big{font-size:clamp(48px,8vw,72px);font-weight:800;line-height:1;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.next .join{background:var(--red);border-color:var(--red);color:#fff;justify-self:start;margin-top:8px;text-decoration:none}
+.sub2{font-size:14px;opacity:.75}
+.grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.pg{display:grid;grid-template-columns:56px repeat(var(--n),minmax(88px,1fr));gap:4px;min-width:max-content}
+.pg .h{font-size:13px;font-weight:700;text-align:center;padding:6px 0;white-space:nowrap}
+.pg .t{font-size:13px;color:var(--mute);display:flex;align-items:center;font-variant-numeric:tabular-nums}
+.slot{border:1px solid var(--line);background:var(--card);border-radius:8px;min-height:40px;display:flex;align-items:center;justify-content:center;gap:2px;font-size:13px;flex-wrap:wrap;padding:2px;font-weight:600}
+.slot:hover{border-color:var(--ink)}
+.slot.mine{border:2px solid #00a862}
+#pgm .slot.mine{background:#00a862;color:#fff}
+.slot.best{box-shadow:inset 0 0 0 2px var(--ink)}
+.slot .av{width:20px;height:20px;font-size:11px}
+.bests{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,200px),1fr));gap:8px}
+.bestd{background:var(--col);border-radius:10px;padding:10px 12px;display:grid;gap:2px;font-size:14px}
+.guide{padding-block:6px 40px;display:grid;gap:16px;max-width:980px}
+.guide h2{font-size:32px;margin:0;font-weight:800;letter-spacing:-.02em;line-height:1.1}
+.guide h3{font-size:18px;margin:0 0 4px;font-weight:800}
+.guide p{margin:0;font-size:16px}
+.gsteps{list-style:none;margin:0;padding:0;display:grid;gap:10px;counter-reset:g}
+.gsteps li{counter-increment:g;display:grid;grid-template-columns:44px minmax(0,1fr);gap:12px;border:1px solid var(--line);border-radius:14px;padding:14px;background:var(--card)}
+.gsteps li::before{content:counter(g);width:44px;height:44px;border-radius:50%;background:var(--ink);color:var(--bg);display:grid;place-items:center;font-weight:800;font-size:18px}
+.gnote{background:var(--col);border-radius:14px;padding:14px 16px}
+@media(max-width:700px){.callbox{grid-template-columns:minmax(0,1fr)}}
+@media(prefers-reduced-motion:reduce){.card.fire{animation:none}}
 .presets{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-top:-4px}
 .hotc[aria-pressed=true]{background:var(--red);border-color:var(--red);color:#fff}
 .chrow .chniche{grid-column:1/-1;min-height:64px}
@@ -145,13 +184,27 @@ textarea.inp{min-height:84px;resize:vertical}
 <p id="banner" class="banner band" hidden></p>
 <header class="top band">
 <div class="brand"><span class="rec" aria-hidden="true"></span><h1>Доска студии</h1></div>
-<nav class="tabs" aria-label="Разделы"><button data-act="view" data-view="board">Доска задач</button><button data-act="view" data-view="team">Команда и роли</button></nav>
+<nav class="tabs" aria-label="Разделы"><button data-act="view" data-view="board">Доска задач</button><button data-act="view" data-view="team">Команда и роли</button><button data-act="view" data-view="calls">Созвоны</button><button data-act="view" data-view="guide">Работа с Claude</button></nav>
 <div class="right"><span id="sync">Подключаюсь…</span><button class="btn" id="meBtn" data-act="me">Кто я?</button><button class="btn" data-act="channels">Каналы</button><button class="btn primary" data-act="new">+ Новая задача</button></div>
 </header>
+<div id="alert" class="alert band" hidden role="status"></div>
 <div id="tools"><div class="people band" id="people"></div>
 <div class="filters band"><input id="q" type="search" placeholder="Поиск по задачам" aria-label="Поиск по задачам"><div id="chips"></div></div></div>
 <main id="board" class="board" aria-label="Доска задач"></main>
 <main id="team" class="team band" hidden></main>
+<main id="calls" class="calls band" hidden></main>
+<main id="guide" class="guide band" hidden>
+<section><h2>Как мы делаем видео с Claude</h2><p class="sub" style="margin-top:6px">Схема на старте. Меняем её, когда найдём способ лучше.</p></section>
+<ol class="gsteps">
+<li><div><h3>Три проекта Claude, по одному на канал</h3><p>History, What If и Generations. В инструкции проекта: ниша и рубрики, стиль, голос озвучки, формат ответа. В файлы проекта кладём сценарии-примеры, которые получились лучше всего.</p></div></li>
+<li><div><h3>Новый чат на каждое видео</h3><p>Внутри проекта канала пишем тему и получаем всё в одном чате: сценарий, список кадров с промптами для картинок, текст для озвучки, название, описание и хэштеги. Описание зависит от сценария, поэтому отдельный чат для описаний не нужен.</p></div></li>
+<li><div><h3>Голос, картинки и монтаж в своих сервисах</h3><p>Видео целиком Claude не делает. Озвучка в ElevenLabs, картинки в Nano Banana, сборка в CapCut или Premiere (подборка Said в задаче про инструменты). У каждого канала свой голос.</p></div></li>
+<li><div><h3>Своя платформа для загрузки на три канала</h3><p>Одна страница: выбрал канал → видео, превью, название, описание, хэштеги, время публикации → загрузка через YouTube Data API. Можно ставить публикацию по расписанию. Лимит API: 100 загрузок в день. Делаем после того, как созданы каналы.</p></div></li>
+<li><div><h3>Публикация прямо из чата Claude</h3><p>Подключаем платформу к Claude как свой коннектор (MCP): кидаешь в чат превью и описание, Claude публикует и перед каждой публикацией спрашивает подтверждение. Тяжёлые видеофайлы удобнее грузить сразу в платформу.</p></div></li>
+<li><div><h3>Пометка ИИ-контента</h3><p>Реалистичные сгенерированные видео YouTube просит помечать. В API для этого есть поле containsSyntheticMedia, его включаем в платформе.</p></div></li>
+</ol>
+<div class="gnote"><h3>Порядок задач</h3><p>Said создаёт каналы → Emir загружает оформление, Almaz делает платформу загрузки → публикация из чата. Сценарии Almanbet и проекты Claude можно делать параллельно. На доске такие связи видны по пометке «После: …» на карточке.</p></div>
+</main>
 <p class="note band" id="note">Задачи на старте разложены по ролям, их можно менять. Срок ставится в задаче: датой или кнопками «Завтра», «Через неделю». «Горят сроки» показывает просроченное и то, что надо сдать в ближайшие два дня. Задачи перетаскиваются между колонками мышкой, на телефоне статус меняется внутри задачи.</p>
 <div id="modal" class="modal" hidden><div class="sheet" id="sheet" role="dialog" aria-modal="true"></div></div>
 <div id="toast" role="status"></div>
@@ -215,14 +268,14 @@ const GH_DATA='https://api.github.com/repos/Almaz192/studio-board/contents/data.
 let mode=(FIREBASE_CONFIG&&window.firebase)?'fb':'local',db=null,metaReady=false,tasksReady=false,migrating=false;
 const fresh=()=>({seedV:SEED.v,people:JSON.parse(JSON.stringify(SEED.people)),channels:JSON.parse(JSON.stringify(SEED.channels)),flow:JSON.parse(JSON.stringify(SEED.flow)),tasks:JSON.parse(JSON.stringify(SEED.tasks))});
 const canEdit=()=>true;
-const metaOf=x=>({seedV:SEED.v,people:x.people,channels:x.channels,flow:x.flow});
+const metaOf=x=>({seedV:SEED.v,people:x.people,channels:x.channels,flow:x.flow,calls:x.calls||DEF_CALLS});
 function fail(e){console.error(e);sync('err',String(e&&e.message||e));toast('Не удалось сохранить, проверьте интернет')}
 function change(fn,msg){const before=JSON.parse(JSON.stringify(S));fn(S);redraw();if(msg)toast(msg);
  if(mode==='local'){st('studio-board',S);sync('local');return true}
  const b=db.batch(),old=new Map(before.tasks.map(t=>[t.id,JSON.stringify(t)])),now=new Set();let n=0;
  S.tasks.forEach(t=>{now.add(t.id);const j=JSON.stringify(t);if(old.get(t.id)!==j){b.set(db.collection('tasks').doc(t.id),JSON.parse(j));n++}});
  before.tasks.forEach(t=>{if(!now.has(t.id)){b.delete(db.collection('tasks').doc(t.id));n++}});
- if(JSON.stringify(metaOf(before))!==JSON.stringify(metaOf(S))){b.set(db.collection('studio').doc('meta'),JSON.parse(JSON.stringify(metaOf(S))));n++}
+ if(JSON.stringify(metaOf(before))!==JSON.stringify(metaOf(S))){b.set(db.collection('studio').doc('meta'),JSON.parse(JSON.stringify(metaOf(S))),{merge:true});n++}
  if(n){sync('pend');b.commit().then(()=>sync('ok')).catch(fail)}return true}
 async function migrate(){if(migrating)return;migrating=true;let src=null;
  try{const r=await fetch(GH_DATA,{headers:{Accept:'application/vnd.github+json'},cache:'no-store'});if(r.ok){const j=await r.json();src=JSON.parse(new TextDecoder().decode(Uint8Array.from(atob(j.content.replace(/\s/g,'')),c=>c.charCodeAt(0))))}}catch(e){}
@@ -231,18 +284,81 @@ async function migrate(){if(migrating)return;migrating=true;let src=null;
  await b.commit().catch(fail)}
 function startFb(){try{firebase.initializeApp(FIREBASE_CONFIG);db=firebase.firestore()}catch(e){console.error(e);mode='local';startLocal();return}
  sync('load');S=fresh();S.tasks=[];render();
- db.collection('studio').doc('meta').onSnapshot(s=>{if(!s.exists){migrate();return}const d=s.data();S.people=d.people||[];S.channels=d.channels||[];S.flow=d.flow||[];metaReady=true;redraw()},fail);
+ db.collection('studio').doc('meta').onSnapshot(s=>{if(!s.exists){migrate();return}const d=s.data();S.people=d.people||[];S.channels=d.channels||[];S.flow=d.flow||[];S.calls=d.calls||DEF_CALLS;S.poll=d.poll||null;metaReady=true;redraw();maybePoll()},fail);
  db.collection('tasks').onSnapshot({includeMetadataChanges:true},q=>{S.tasks=q.docs.map(d=>Object.assign({comments:[]},d.data(),{id:d.id}));tasksReady=true;sync(q.metadata.hasPendingWrites?'pend':'ok');redraw()},fail)}
 function startLocal(){const L=st('studio-board');if(L&&L.tasks&&(L.seedV||1)>=SEED.v)S=L;else{S=fresh();st('studio-board',S)}
- $('#banner').innerHTML='<b>База не подключена.</b> Задачи сохраняются только в этом браузере.';$('#banner').hidden=false;sync('local');render()}
+ S.calls=S.calls||DEF_CALLS;$('#banner').innerHTML='<b>База не подключена.</b> Задачи сохраняются только в этом браузере.';$('#banner').hidden=false;sync('local');render();maybePoll()}
 function redraw(){const ae=document.activeElement;if(UI.view==='team'&&ae&&ae.closest&&ae.closest('#team')){dirtyTeam=true;renderBoardSide();return}render();
  const f=$('#tf');if(f&&f.dataset.id&&!$('#modal').hidden){const t=T(f.dataset.id);if(t)refreshComments(t)}}
 function renderBoardSide(){const m=P(me);$('#meBtn').innerHTML=m?`${av(m)}<span>${esc(m.name)}</span>`:'Кто я?'}
 
+/* ---- созвоны, опрос и напоминания ---- */
+const DEF_CALLS={time:'20:00',every:1,from:'2026-11-28',link:''};
+const SLOTS=[];for(let h=10;h<=23;h++)SLOTS.push(pad(h)+':00');
+const WD=['вс','пн','вт','ср','чт','пт','сб'];
+const ymd=d=>`${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
+const dayLbl=s=>{const d=new Date(s+'T12:00:00');return `${WD[d.getDay()]}, ${d.getDate()} ${MON[d.getMonth()]}`};
+const hm=d=>pad(d.getHours())+':'+pad(d.getMinutes());
+let PD=null,pollAsked=false;
+const NUDGE_LATE=['Йоу, закончи меня поскорее!','Я уже горю, спаси меня','Дедлайн прошёл, давай добьём','Ну пожалуйста, закончи меня'];
+const NUDGE_TODAY=['Йоу, дедлайн сегодня!','Сегодня мой последний день','Закрой меня до вечера'];
+const pick=(arr,id)=>{let h=0;for(const c of String(id))h=(h*31+c.charCodeAt(0))>>>0;return arr[h%arr.length]};
+const isToday=t=>t.due&&t.status!=='done'&&!late(t)&&days(t.due)<=0;
+const heat=t=>late(t)?'fire':isToday(t)?'hot':'';
+function nextCall(){const c=S.calls||DEF_CALLS,[hh,mm]=String(c.time||'20:00').split(':').map(Number),ev=Math.max(1,+c.every||1),now=Date.now();
+ for(let i=-1;i<14;i++){const d=new Date();d.setDate(d.getDate()+i);d.setHours(hh,mm,0,0);const diff=Math.round((new Date(ymd(d)+'T12:00:00')-new Date((c.from||TODAY)+'T12:00:00'))/864e5);
+  if(((diff%ev)+ev)%ev!==0)continue;if(d.getTime()+45*60000>now)return d}return null}
+const inTxt=d=>{const m=Math.round((d-Date.now())/60000);if(m<=0)return'идёт сейчас';if(m<60)return'через '+m+' мин';const h=Math.floor(m/60);if(h<24)return'через '+h+' ч '+(m%60)+' мин';return'через '+Math.round(h/24)+' дн.'};
+const dayWordD=d=>{const n=days(ymd(d));return n===0?'сегодня':n===1?'завтра':dayLbl(ymd(d))};
+const safeLink=u=>/^https:\/\//i.test(u||'')?u:'';
+const pollActive=()=>!!(S.poll&&S.poll.days&&S.poll.days.length&&S.poll.days[S.poll.days.length-1]>=TODAY);
+const answers=()=>(S.poll&&S.poll.answers)||{};
+const slotsP=()=>(S.poll&&S.poll.slots)||SLOTS;
+const slotWho=(day,t)=>S.people.filter(p=>((answers()[p.id]||{})[day]||[]).includes(t));
+function bestFor(day){let best=0,list=[];slotsP().forEach(t=>{const n=slotWho(day,t).length;if(n>best){best=n;list=[t]}else if(n===best&&n>0)list.push(t)});return{best,list}}
+function gridHtml(sel,act,showOthers){const ds=S.poll.days,n=S.people.length||1;
+ return `<div class="scroll"><div class="pg" style="--n:${ds.length}"><span></span>${ds.map(d=>`<span class="h">${esc(dayLbl(d))}</span>`).join('')}
+ ${slotsP().map(t=>`<span class="t">${t}</span>${ds.map(d=>{const mine=((sel||{})[d]||[]).includes(t);const who=showOthers?slotWho(d,t):[];const k=who.length;const b=showOthers&&k>0&&bestFor(d).list.includes(t);
+  return `<button type="button" class="slot${mine?' mine':''}${b?' best':''}" data-act="${act}" data-day="${d}" data-t="${t}" aria-pressed="${mine}" aria-label="${esc(dayLbl(d))}, ${t}"${showOthers&&k?` style="background:color-mix(in srgb,#00a862 ${Math.round(k/n*70)}%,var(--card))"`:''}>${showOthers?who.map(p=>av(p)).join(''):(mine?'Могу':'')}</button>`}).join('')}`).join('')}</div></div>`}
+function savePollAns(a){if(!S.poll)return;S.poll.answers=S.poll.answers||{};S.poll.answers[me]=a;redraw();
+ if(mode==='local'){st('studio-board',S);sync('local');return}sync('pend');db.collection('studio').doc('meta').update({['poll.answers.'+me]:a}).then(()=>sync('ok')).catch(fail)}
+function setPoll(p){S.poll=p;redraw();if(mode==='local'){st('studio-board',S);return}db.collection('studio').doc('meta').update({poll:p}).then(()=>sync('ok')).catch(fail)}
+function openPoll(){if(!pollActive())return;PD=JSON.parse(JSON.stringify(answers()[me]||{}));
+ modal(`<div class="wrap"><div class="mh"><h2>${esc(S.poll.title||'Когда удобно созвониться?')}</h2><button class="x" data-act="polllater" aria-label="Закрыть">×</button></div>
+ <p class="sub">Отметь все часы, когда тебе удобно созвониться с командой. Потом выберем время, которое подходит всем.</p><div id="pgm">${gridHtml(PD,'pdraft',false)}</div>
+ <div class="acts"><button class="btn primary" data-act="pollsave">Сохранить</button><button class="btn" data-act="pollnone">Не могу в эти дни</button><button class="btn sp" data-act="polllater">Спросить позже</button></div></div>`)}
+function maybePoll(){if(pollAsked||!me||!P(me)||!pollActive()||answers()[me]||!$('#modal').hidden)return;if(st('studio-poll-skip')===S.poll.id+TODAY)return;pollAsked=true;openPoll()}
+function renderCalls(){const c=S.calls||DEF_CALLS,nx=nextCall(),link=safeLink(c.link);
+ let poll='';
+ if(S.poll&&S.poll.days){const a=answers(),done=S.people.filter(p=>a[p.id]),wait=S.people.filter(p=>!a[p.id]);
+  poll=`<section class="pcard"><h2>${esc(S.poll.title||'Когда удобно созвониться?')}</h2>
+  <p class="sub">Нажимай на клетки, чтобы отметить, когда тебе удобно. Чем зеленее клетка, тем больше людей могут. Обведены лучшие часы дня.</p>
+  <div class="bests">${S.poll.days.map(d=>{const b=bestFor(d);return `<div class="bestd"><b>${esc(dayLbl(d))}</b><span>${b.best?`${b.list.slice(0,4).join(', ')}: могут ${b.best} из ${S.people.length}`:'пока нет ответов'}</span></div>`}).join('')}</div>
+  ${gridHtml(answers()[me]||{},'pslot',true)}
+  <p class="sub">Ответили: ${done.map(p=>esc(p.name)).join(', ')||'пока никто'}. ${wait.length?'Ждём: '+wait.map(p=>esc(p.name)).join(', ')+'.':'Ответили все.'}</p>
+  <div class="acts">${pollActive()?'<button class="btn" data-act="pollopen">Ответить в окне</button>':''}<button class="btn" data-act="pollnew">Новый опрос</button></div></section>`}
+ else poll=`<section class="pcard"><h2>Опрос по времени</h2><p class="sub">Сейчас опроса нет.</p><div><button class="btn" data-act="pollnew">Создать опрос</button></div></section>`;
+ $('#calls').innerHTML=`<div class="callbox"><div class="next"><span>Следующий созвон</span><span class="big">${nx?hm(nx):'—'}</span><span>${nx?esc(dayWordD(nx))+', '+inTxt(nx):''}</span>${link?`<a class="btn join" href="${esc(link)}" target="_blank" rel="noopener">Зайти в звонок</a>`:'<span class="sub2">Ссылку на звонок можно добавить справа</span>'}</div>
+ <section class="pcard"><h2>Регулярный созвон</h2><div class="grid2"><label>Время<input class="inp" type="time" id="c-time" value="${esc(c.time||'20:00')}"></label><label>Как часто<select class="inp" id="c-every">${opt([[1,'Каждый день'],[2,'Раз в 2 дня']],c.every||1)}</select></label></div>
+ <label>Ссылка на звонок<input class="inp" id="c-link" value="${esc(c.link||'')}" placeholder="https://meet.google.com/…"></label><div><button class="btn primary" data-act="callsave">Сохранить</button></div></section></div>`+poll}
+function renderAlert(){const el=$('#alert');const m=P(me);let parts=[],fire=false;
+ if(m){const my=S.tasks.filter(t=>t.who===me&&heat(t));fire=my.some(t=>late(t));
+  if(my.length)parts.push(`<b>${esc(m.name)}, ${my.length} ${plural(my.length,['задача горит','задачи горят','задач горят'])}!</b>`+my.slice(0,3).map(t=>`<button data-act="open" data-id="${esc(t.id)}">${esc(short(t.title))}</button>`).join(''))}
+ const nx=nextCall();if(nx&&nx-Date.now()<90*60000)parts.push(`<b>Созвон ${esc(inTxt(nx))}</b>`+(safeLink((S.calls||{}).link)?`<a class="abtn" href="${esc(safeLink(S.calls.link))}" target="_blank" rel="noopener">Зайти</a>`:''));
+ if(m&&pollActive()&&!answers()[me])parts.push(`<b>Ответь, когда тебе удобно созвониться</b><button data-act="pollopen">Ответить</button>`);
+ if(parts.length&&'Notification' in window&&Notification.permission==='default')parts.push('<button data-act="notif">Включить уведомления</button>');
+ el.innerHTML=parts.map(p=>`<span class="ap">${p}</span>`).join('');el.hidden=!parts.length;el.className='alert band'+(fire?'':' calm');
+ const n=m?S.tasks.filter(t=>t.who===me&&heat(t)).length:0;document.title=(n?`(${n}) `:'')+'Доска студии'}
+function notifyCheck(){if(!('Notification' in window)||Notification.permission!=='granted'||!me)return;const sent=st('studio-sent')||{},k=x=>x+'|'+TODAY,now=Date.now();
+ S.tasks.filter(t=>t.who===me&&t.due&&t.status!=='done').forEach(t=>{const ms=dueAt(t)-now;if(ms<3*3600e3&&!sent[k(t.id)]){sent[k(t.id)]=1;try{new Notification(ms<0?'Йоу, задача просрочена':'Скоро дедлайн',{body:t.title})}catch(e){}}});
+ const nx=nextCall();if(nx){const ms=nx-now;if(ms<=15*60000&&ms>-5*60000&&!sent[k('call')]){sent[k('call')]=1;try{new Notification('Созвон через '+Math.max(0,Math.round(ms/60000))+' мин',{body:'Заходи к команде в '+hm(nx)})}catch(e){}}}
+ st('studio-sent',sent)}
+setInterval(()=>{const ae=document.activeElement;if($('#modal').hidden&&!(ae&&ae.matches&&ae.matches('input,textarea,select')))redraw();else renderAlert();notifyCheck()},60000);
+
 /* ---- отрисовка ---- */
 function match(t){const q=UI.q.trim().toLowerCase();return(!UI.hot||isHot(t))&&(!UI.who||t.who===UI.who)&&(UI.ch==='*'||t.ch===UI.ch)&&(!q||(t.title+' '+(t.desc||'')).toLowerCase().includes(q))}
 function card(t){const p=P(t.who),n=(t.comments||[]).length;
-return `<article class="card${t.status==='done'?' done':''}" draggable="true" tabindex="0" data-id="${esc(t.id)}"><div class="meta">${chTag(t.ch)}<span>${esc(t.type)}</span>${prio(t.prio)}</div><h3>${esc(t.title)}</h3>${(()=>{const b=blocker(t);return b?`<div class="wait">После: ${esc(short(b.title))}</div>`:''})()}<div class="foot">${av(p)}<span>${esc(p?p.name:'Не назначено')}</span>${n?`<span>${n} комм.</span>`:''}${dueTxt(t)}</div></article>`}
+const ht=heat(t);return `<article class="card${t.status==='done'?' done':''}${ht?' '+ht:''}" draggable="true" tabindex="0" data-id="${esc(t.id)}"><div class="meta">${chTag(t.ch)}<span>${esc(t.type)}</span>${prio(t.prio)}</div>${ht?`<div class="nudge">${esc(pick(ht==='fire'?NUDGE_LATE:NUDGE_TODAY,t.id))}</div>`:''}<h3>${esc(t.title)}</h3>${(()=>{const b=blocker(t);return b?`<div class="wait">После: ${esc(short(b.title))}</div>`:''})()}<div class="foot">${av(p)}<span>${esc(p?p.name:'Не назначено')}</span>${n?`<span>${n} комм.</span>`:''}${dueTxt(t)}</div></article>`}
 function renderBoard(){$('#board').innerHTML=COLS.map(([k,name,c])=>{const ts=S.tasks.filter(t=>t.status===k&&match(t)).sort((a,b)=>a.order-b.order);
 return `<section class="col" data-col="${k}"><div class="colh"><i class="st" style="--c:${c}"></i><h2>${name}</h2><span class="cnt">${ts.length}</span><button class="add" data-act="new" data-st="${k}" aria-label="Добавить задачу в колонку ${name}">+</button></div>${ts.map(card).join('')||'<div class="empty">Перетащите сюда задачу</div>'}</section>`}).join('')}
 function renderPeople(){const n=S.people.length;
@@ -263,8 +379,8 @@ return `<section class="pcard"><div class="ph">${av(p,'xl')}<div><b>${esc(p.name
 const chs=`<section><h2>Каналы и ниши</h2><div class="cgrid">${S.channels.map(c=>{const ts=S.tasks.filter(t=>t.ch===c.id),dn=ts.filter(t=>t.status==='done').length;return `<div class="ccard" style="--c:${col(c.color)}"><div class="sh"><i class="dot"></i><b>${esc(c.name)}</b><span class="sub" style="margin-left:auto">${dn} из ${ts.length} готово</span></div><div class="bar"><i style="--c:${col(c.color)};width:${ts.length?dn/ts.length*100:0}%"></i></div><p>${esc(c.niche||'Ниша не описана')}</p></div>`}).join('')}</div><p class="sub" style="margin-top:8px">Названия и ниши меняются кнопкой «Каналы» вверху.</p></section>`;
 $('#team').innerHTML=chs+flow+`<section><h2>Люди и задачи</h2><p class="sub" style="margin-bottom:12px">У каждого может быть несколько ролей: задачу можно дать любому, а роли ниже показывают, кто за что отвечает в первую очередь.</p><div class="pgrid">${cards}</div></section>`}
 function render(){document.querySelectorAll('.tabs button').forEach(b=>b.setAttribute('aria-selected',b.dataset.view===UI.view));
-const b=UI.view==='board';$('#board').hidden=!b;$('#tools').hidden=!b;$('#note').hidden=!b;$('#team').hidden=b;
-if(b){renderPeople();renderChips();renderBoard()}else renderTeam();dirtyTeam=false;renderBoardSide();
+const v=['board','team','calls','guide'].includes(UI.view)?UI.view:'board',b=v==='board';$('#board').hidden=!b;$('#tools').hidden=!b;$('#note').hidden=!b;$('#team').hidden=v!=='team';$('#calls').hidden=v!=='calls';$('#guide').hidden=v!=='guide';
+if(b){renderPeople();renderChips();renderBoard()}else if(v==='team')renderTeam();else if(v==='calls')renderCalls();dirtyTeam=false;renderBoardSide();renderAlert();
 if(document.activeElement!==$('#q'))$('#q').value=UI.q}
 const saveUI=()=>st('studio-ui',UI);
 
@@ -318,7 +434,18 @@ else if(a==='open')openTask(id);
 else if(a==='due'){const d=b.dataset.d;$('#f-due').value=d===''?'':addDays(+d);if(d==='')$('#f-time').value=''}
 else if(a==='close')close();
 else if(a==='me')pickMe();
-else if(a==='setme'){me=id;st('studio-me',id);close();render();toast('Привет, '+P(id).name)}
+else if(a==='setme'){me=id;st('studio-me',id);close();render();toast('Привет, '+P(id).name);pollAsked=false;maybePoll()}
+else if(a==='callsave'){const c={time:g('c-time')||'20:00',every:+g('c-every')||1,from:TODAY,link:g('c-link').trim()};change(x=>{x.calls=c},'Созвон сохранён')}
+else if(a==='pslot'||a==='pdraft'){if(!me||!P(me)){pickMe();return}const d=b.dataset.day,t=b.dataset.t,o=a==='pdraft'?PD:JSON.parse(JSON.stringify(answers()[me]||{}));const arr=o[d]||[];o[d]=arr.includes(t)?arr.filter(x=>x!==t):arr.concat(t).sort();
+ if(a==='pdraft'){$('#pgm').innerHTML=gridHtml(PD,'pdraft',false)}else{(S.poll.days||[]).forEach(x=>{if(!o[x])o[x]=[]});o._at=Date.now();savePollAns(o)}}
+else if(a==='pollsave'){S.poll.days.forEach(x=>{if(!PD[x])PD[x]=[]});PD._at=Date.now();savePollAns(PD);close();toast('Спасибо! Время сохранено')}
+else if(a==='pollnone'){const o={_at:Date.now()};S.poll.days.forEach(x=>o[x]=[]);savePollAns(o);close();toast('Отметили, что в эти дни не получится')}
+else if(a==='polllater'){if(S.poll)st('studio-poll-skip',S.poll.id+TODAY);close()}
+else if(a==='pollopen'){if(!me||!P(me)){pickMe();return}openPoll()}
+else if(a==='pollnew'){modal(`<div class="wrap"><div class="mh"><h2>Новый опрос</h2><button class="x" data-act="close" aria-label="Закрыть">×</button></div><p class="sub">Старые ответы удалятся. Каждый увидит опрос при входе на сайт.</p><label>Вопрос<input class="inp" id="np-title" value="Когда удобно созвониться?"></label><div class="grid2"><label>С какого дня<input class="inp" type="date" id="np-from" value="${TODAY}"></label><label>Сколько дней<select class="inp" id="np-n">${opt([[1,'1 день'],[2,'2 дня'],[3,'3 дня'],[5,'5 дней'],[7,'Неделя']],3)}</select></label></div><div class="acts"><button class="btn primary" data-act="pollcreate">Запустить опрос</button><button class="btn" data-act="close">Отмена</button></div></div>`)}
+else if(a==='pollcreate'){const f=g('np-from')||TODAY,n=+g('np-n')||3,ds=[];for(let i=0;i<n;i++){const d=new Date(f+'T12:00:00');d.setDate(d.getDate()+i);ds.push(ymd(d))}setPoll({id:'p'+Date.now(),title:g('np-title').trim()||'Когда удобно созвониться?',days:ds,slots:SLOTS,answers:{}});close();toast('Опрос запущен');pollAsked=false;maybePoll()}
+else if(a==='notif'){Notification.requestPermission().then(p=>{toast(p==='granted'?'Уведомления включены. Они приходят, пока сайт открыт':'Уведомления не разрешены в браузере');renderAlert()})}
+
 else if(a==='channels'){if(canEdit())openChannels()}
 else if(a==='chadd'){CH.push({id:'c'+Date.now().toString(36),name:'Канал '+(CH.length+1),color:PAL[CH.length%PAL.length],niche:''});drawCh()}
 else if(a==='chdel'){CH.splice(+b.dataset.i,1);drawCh()}
