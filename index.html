@@ -224,6 +224,19 @@ textarea.inp{min-height:84px;resize:vertical}
 .player .x{margin-left:0}
 #player:not([hidden])~#toast{bottom:96px}
 @media(max-width:600px){.mrow{grid-template-columns:44px minmax(0,1fr)}.mrow>.btn{grid-column:2;justify-self:start}.play{width:44px;height:44px}}
+.gen{border:1px solid var(--line);border-radius:16px;padding:16px;background:var(--card);display:grid;gap:12px}
+.gen h3,.libh{font-size:20px;margin:0;font-weight:800}
+.libh{margin-top:6px}
+.ggrid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px}
+.ggrid .gtopic{grid-column:span 3}
+.ggrid .gfull{grid-column:1/-1}
+textarea.gout{min-height:220px;font-size:14px;line-height:1.45;background:var(--col)}
+.srow{display:flex;flex-wrap:wrap;align-items:center;gap:6px 10px}
+.stage{--c:#9aa3b2;border:2px solid var(--c);border-radius:20px;padding:4px 10px;background:var(--card);font-size:13px;font-weight:700;min-height:34px;margin-left:auto}
+.sprev{color:var(--mute);font-size:14px!important;display:-webkit-box;-webkit-line-clamp:4;-webkit-box-orient:vertical;overflow:hidden;white-space:pre-wrap}
+textarea.stext{min-height:280px}
+.stextv{white-space:pre-wrap;overflow-wrap:anywhere;font:15px/1.55 Onest,system-ui,sans-serif;background:var(--col);border-radius:12px;padding:14px;margin:0;max-height:60vh;overflow:auto}
+@media(max-width:760px){.ggrid{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}.ggrid .gtopic,.ggrid .gfull{grid-column:1/-1}}
 .presets{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-top:-4px}
 .hotc[aria-pressed=true]{background:var(--red);border-color:var(--red);color:#fff}
 .chrow .chniche{grid-column:1/-1;min-height:64px}
@@ -352,7 +365,7 @@ function startFb(){try{firebase.initializeApp(FIREBASE_CONFIG);db=firebase.fires
  db.collection('tasks').where('status','in',COLS.map(c=>c[0])).onSnapshot({includeMetadataChanges:true},q=>{S.tasks=q.docs.map(d=>Object.assign({comments:[]},d.data(),{id:d.id}));tasksReady=true;sync(q.metadata.hasPendingWrites?'pend':'ok');redraw()},fail)}
 function startLocal(){const L=st('studio-board');if(L&&L.tasks&&(L.seedV||1)>=SEED.v)S=L;else{S=fresh();st('studio-board',S)}
  S.calls=S.calls||DEF_CALLS;$('#banner').innerHTML='<b>База не подключена.</b> Задачи сохраняются только в этом браузере.';$('#banner').hidden=false;sync('local');render();maybePoll()}
-function redraw(){const ae=document.activeElement;if(UI.view==='team'&&ae&&ae.closest&&ae.closest('#team')){dirtyTeam=true;renderBoardSide();return}render();
+function redraw(){const ae=document.activeElement;if((UI.view==='team'||UI.view==='assets')&&ae&&ae.closest&&ae.closest('#team,#assets')&&ae.matches('input,textarea,select')){dirtyTeam=true;renderBoardSide();return}render();
  const f=$('#tf');if(f&&f.dataset.id&&!$('#modal').hidden){const t=T(f.dataset.id);if(t)refreshComments(t)}}
 function renderBoardSide(){const m=P(me);$('#meBtn').innerHTML=m?`${av(m)}<span>${esc(m.name)}</span>`:'Кто я?'}
 
@@ -436,7 +449,7 @@ window.addEventListener('pagehide',()=>beat(false));
 
 /* ---- Assets: конкуренты, вдохновение, музыка ---- */
 let AS=[],AEDIT=null,APEND=null,AUDIO={};
-const ASUBS=[['comp','Конкуренты'],['inspo','Вдохновение'],['music','Музыка для монтажа']];
+const ASUBS=[['scripts','Сценарии'],['comp','Конкуренты'],['inspo','Вдохновение'],['music','Музыка для монтажа']];
 const CHUNK=800000,MAXMUSIC=15*1024*1024;
 const okImg=s=>typeof s==='string'&&/^data:image\/(jpeg|png|webp|gif);base64,/.test(s);
 const host=u=>{try{return new URL(u).hostname.replace(/^www\./,'')}catch(e){return''}};
@@ -450,9 +463,10 @@ async function delFile(a){if(!a.fileId)return;const b=db.batch();for(let i=0;i<(
 function aFiltered(kind){const q=(UI.aq||'').trim().toLowerCase(),ch=UI.ach||'*';return AS.filter(a=>a.kind===kind&&(ch==='*'||a.ch===ch)&&(!q||[a.title,a.niche,a.style,a.note,a.url].join(' ').toLowerCase().includes(q))).sort((x,y)=>(y.at||0)-(x.at||0))}
 function aMeta(a){return `<div class="ameta">${chTag(a.ch)}<span>${esc(P(a.by)?P(a.by).name:'')}${a.at?', '+fd(ymd(new Date(a.at))):''}</span><span class="aact"><button class="lnk" data-act="aedit" data-id="${esc(a.id)}">Изменить</button><button class="lnk danger" data-act="adel" data-id="${esc(a.id)}">Удалить</button></span></div>`}
 const aLink=a=>a.url&&/^https:\/\//i.test(a.url)?`<a class="alink" href="${esc(a.url)}" target="_blank" rel="noopener">${esc(host(a.url)||'ссылка')}</a>`:(a.url?`<span class="sub">${esc(a.url)}</span>`:'');
-function renderAssets(){const sub=ASUBS.some(s=>s[0]===UI.asub)?UI.asub:'comp',chs=[['*','Все каналы',null],...S.channels.map(c=>[c.id,c.name,c.color]),['','Общее','#9aa3b2']];
+function renderAssets(){const sub=ASUBS.some(s=>s[0]===UI.asub)?UI.asub:'scripts',chs=[['*','Все каналы',null],...S.channels.map(c=>[c.id,c.name,c.color]),['','Общее','#9aa3b2']];
  let body='';
  if(mode!=='fb')body='<p class="sub">Assets работают, когда сайт подключён к базе.</p>';
+ else if(sub==='scripts')body=scriptsBody();
  else if(sub==='comp'){const L=aFiltered('competitor');body=L.length?`<div class="agrid">${L.map(a=>`<article class="acard"><div class="ah"><b>${esc(a.title)}</b>${a.subs?`<span class="sub">${esc(a.subs)}</span>`:''}</div>${aLink(a)}
   ${a.niche?`<p><span class="k">Ниша</span>${esc(a.niche)}</p>`:''}${a.style?`<p><span class="k">Стиль</span>${esc(a.style)}</p>`:''}${a.note?`<p><span class="k">Что взять</span>${esc(a.note)}</p>`:''}${aMeta(a)}</article>`).join('')}</div>`:'<div class="empty">Пока пусто. Добавьте первого конкурента: ссылку на канал, нишу и стиль.</div>'}
  else if(sub==='inspo'){const L=aFiltered('inspo');body=`<p class="sub">Вставьте картинку или ссылку прямо на этой странице через Ctrl+V (на Mac Cmd+V) или перетащите файл сюда.</p>`+(L.length?`<div class="igrid">${L.map(a=>`<article class="icard">${okImg(a.thumb)?`<button class="ithumb" data-act="aview" data-id="${esc(a.id)}" aria-label="Открыть картинку"><img src="${a.thumb}" alt="${esc(a.title||'картинка')}" loading="lazy"></button>`:''}
@@ -460,11 +474,15 @@ function renderAssets(){const sub=ASUBS.some(s=>s[0]===UI.asub)?UI.asub:'comp',c
  else{const L=aFiltered('music');body=`<p class="sub">Треки для монтажа: слушайте прямо здесь и скачивайте для CapCut или Premiere. Файл до 15 МБ, можно и просто ссылкой.</p>`+(L.length?`<div class="mlist">${L.map(a=>`<article class="mrow">${a.fileId?`<button class="play" data-act="aplay" data-id="${esc(a.id)}" aria-label="Слушать">${AUDIO[a.id]?'■':'▶'}</button>`:'<span class="play off">♪</span>'}
   <div class="mmain"><b>${esc(a.title)}</b><span class="sub">${[a.note,a.fileName&&fsize(a.size||0)].filter(Boolean).map(esc).join(' · ')}</span>${aLink(a)}<div id="au-${esc(a.id)}"></div>${aMeta(a)}</div>${a.fileId?`<button class="btn" data-act="adl" data-id="${esc(a.id)}">Скачать</button>`:''}</article>`).join('')}</div>`:'<div class="empty">Пока пусто. Загрузите первый трек.</div>')}
  $('#assets').innerHTML=`<div class="ahead"><h2>Assets</h2><button class="btn primary" data-act="anew">+ Добавить</button></div>
- <div class="asubs" role="tablist">${ASUBS.map(([k,n])=>`<button role="tab" data-act="asub" data-id="${k}" aria-selected="${k===sub}">${n}<span class="cnt">${AS.filter(a=>a.kind===({comp:'competitor',inspo:'inspo',music:'music'})[k]).length}</span></button>`).join('')}</div>
+ <div class="asubs" role="tablist">${ASUBS.map(([k,n])=>`<button role="tab" data-act="asub" data-id="${k}" aria-selected="${k===sub}">${n}<span class="cnt">${AS.filter(a=>a.kind===({scripts:'script',comp:'competitor',inspo:'inspo',music:'music'})[k]).length}</span></button>`).join('')}</div>
  <div class="filters"><input id="aq" type="search" placeholder="Поиск" aria-label="Поиск по assets" value="${esc(UI.aq||'')}"><div class="chipsrow">${chs.map(([id,n,c])=>`<button class="chip" data-act="ach" data-id="${esc(id)}" aria-pressed="${(UI.ach||'*')===id}">${c?`<i class="dot" style="--c:${col(c)}"></i>`:''}${esc(n)}</button>`).join('')}</div></div>${body}`}
-function assetForm(kind,a,pre){a=a||{};pre=pre||{};APEND=pre.file?pre:null;const chSel=`<label>Наш канал<select class="inp" id="af-ch">${opt([['','Общее'],...S.channels.map(c=>[c.id,c.name])],a.ch!==undefined?a.ch:(UI.ach&&UI.ach!=='*'?UI.ach:''))}</select></label>`;
- const T={competitor:'Конкурент',inspo:'Вдохновение',music:'Трек для монтажа'}[kind];let f='';
- if(kind==='competitor')f=`<label>Название канала<input class="inp" id="af-title" value="${esc(a.title||'')}" placeholder="Например: Kurzgesagt"></label><label>Ссылка на канал<input class="inp" id="af-url" value="${esc(a.url||pre.url||'')}" placeholder="https://www.youtube.com/@…"></label>
+function assetForm(kind,a,pre){a=a||{};pre=pre||{};APEND=pre.file?pre:null;const chSel=`<label>Наш канал<select class="inp" id="af-ch">${opt([['','Общее'],...S.channels.map(c=>[c.id,c.name])],a.ch!==undefined?a.ch:pre.ch!==undefined?pre.ch:(UI.ach&&UI.ach!=='*'?UI.ach:''))}</select></label>`;
+ const T={script:'Сценарий',competitor:'Конкурент',inspo:'Вдохновение',music:'Трек для монтажа'}[kind];let f='';
+ if(kind==='script')f=`<label>Название<input class="inp" id="af-title" value="${esc(a.title||pre.title||'')}" placeholder="Например: Every US citizen does this"></label>
+  <div class="grid2">${chSel}<label>Рубрика<input class="inp" id="af-rubric" list="af-rl" value="${esc(a.rubric||pre.rubric||'')}"><datalist id="af-rl">${Object.values(RUBRICS).flat().map(r=>`<option value="${esc(r)}">`).join('')}</datalist></label></div>
+  <div class="grid2"><label>Статус<select class="inp" id="af-stage">${opt(STAGES.map(s=>[s[0],s[1]]),a.stage||'draft')}</select></label><label>Тема<input class="inp" id="af-topic" value="${esc(a.topic||pre.topic||'')}"></label></div>
+  <label>Текст сценария<textarea class="inp stext" id="af-text" placeholder="Вставьте сюда ответ Claude целиком">${esc(a.text||'')}</textarea></label>`;
+ else if(kind==='competitor')f=`<label>Название канала<input class="inp" id="af-title" value="${esc(a.title||'')}" placeholder="Например: Kurzgesagt"></label><label>Ссылка на канал<input class="inp" id="af-url" value="${esc(a.url||pre.url||'')}" placeholder="https://www.youtube.com/@…"></label>
   <div class="grid2">${chSel}<label>Подписчики<input class="inp" id="af-subs" value="${esc(a.subs||'')}" placeholder="например, 1,2 млн"></label></div>
   <label>Ниша<input class="inp" id="af-niche" value="${esc(a.niche||'')}"></label><label>Стиль<textarea class="inp" id="af-style" placeholder="Визуал, голос, темп, превью">${esc(a.style||'')}</textarea></label><label>Что взять для нас<textarea class="inp" id="af-note">${esc(a.note||'')}</textarea></label>`;
  else if(kind==='inspo')f=`<div class="drop" id="af-drop">${okImg(pre.thumb||a.thumb)?`<img src="${pre.thumb||a.thumb}" alt="">`:'<span>Вставьте картинку (Ctrl+V), перетащите её сюда или</span>'}<label class="lnk">выберите файл<input type="file" id="af-file" accept="image/*" hidden></label></div>
@@ -480,6 +498,7 @@ async function takeFile(file){const form=$('#af');if(!form||!file)return;const k
 async function saveAssetForm(form){if(!db){toast('Нет связи с базой');return}const kind=form.dataset.kind,id=form.dataset.id||aUid(),old=AS.find(x=>x.id===id),btn=$('#af-save');
  const v={kind,status:'asset',title:(g('af-title')||'').trim(),url:(g('af-url')||'').trim(),note:(g('af-note')||'').trim(),ch:g('af-ch')||''};
  if(kind==='competitor'){v.niche=g('af-niche').trim();v.style=g('af-style').trim();v.subs=g('af-subs').trim()}
+ if(kind==='script'){v.rubric=g('af-rubric').trim();v.stage=g('af-stage')||'draft';v.topic=g('af-topic').trim();v.text=g('af-text');if(!v.text.trim()&&!v.topic&&!v.title){toast('Вставьте текст сценария или тему');return}if(!v.title)v.title=(v.topic||v.text.trim().split('\n')[0]||'Сценарий').slice(0,80)}
  if(kind==='competitor'&&!v.title){toast('Впишите название канала');return}
  if(kind==='inspo'&&!v.url&&!(APEND&&APEND.full)&&!(old&&old.thumb)){toast('Добавьте картинку или ссылку');return}
  if(kind==='music'&&!v.url&&!(APEND&&APEND.file)&&!(old&&old.fileId)){toast('Загрузите трек или дайте ссылку');return}
@@ -492,13 +511,13 @@ async function saveAssetForm(form){if(!db){toast('Нет связи с базо�
   await db.collection('tasks').doc(id).set(v,{merge:true});APEND=null;close();toast('Сохранено в Assets')}
  catch(e){console.error(e);btn.disabled=false;btn.textContent='Сохранить';toast('Не удалось сохранить, проверьте интернет')}}
 async function assetBlobURL(a){const s=await getFile(a);if(!s)throw new Error('empty');const r=await fetch(s);return URL.createObjectURL(await r.blob())}
-function startAssets(){db.collection('tasks').where('status','==','asset').onSnapshot(q=>{AS=q.docs.map(d=>Object.assign({},d.data(),{id:d.id}));if(UI.view==='assets'){const ae=document.activeElement;if(ae&&ae.id==='aq')return;redraw()}},e=>console.error(e))}
+function startAssets(){db.collection('tasks').where('status','==','asset').onSnapshot(q=>{AS=q.docs.map(d=>Object.assign({},d.data(),{id:d.id}));if(UI.view==='assets')redraw()},e=>console.error(e))}
 document.addEventListener('paste',async e=>{const cd=e.clipboardData;if(!cd)return;const files=[...cd.files||[]];
  if($('#af')&&!$('#modal').hidden){if(files.length){e.preventDefault();takeFile(files[0])}return}
  if(UI.view!=='assets'||!$('#modal').hidden)return;const ae=document.activeElement;if(ae&&ae.matches&&ae.matches('input,textarea'))return;
  const img=files.find(f=>f.type.startsWith('image/')),aud=files.find(f=>f.type.startsWith('audio/')),txt=(cd.getData('text')||'').trim();
  if(img){e.preventDefault();assetForm('inspo',null,{});takeFile(img)}else if(aud){e.preventDefault();assetForm('music',null,{});takeFile(aud)}
- else if(/^https?:\/\//i.test(txt)){e.preventDefault();const sub=UI.asub||'comp';assetForm(sub==='comp'?'competitor':sub==='music'?'music':'inspo',null,{url:txt})}});
+ else if(/^https?:\/\//i.test(txt)&&(UI.asub||'scripts')!=='scripts'){e.preventDefault();const sub=UI.asub||'comp';assetForm(sub==='comp'?'competitor':sub==='music'?'music':'inspo',null,{url:txt})}});
 document.addEventListener('dragover',e=>{if(UI.view==='assets'||$('#af'))e.preventDefault()});
 document.addEventListener('drop',e=>{if(!(UI.view==='assets'||$('#af')))return;if(e.target.closest&&e.target.closest('#board'))return;const f=[...(e.dataTransfer&&e.dataTransfer.files||[])][0];if(!f)return;e.preventDefault();
  if($('#af')&&!$('#modal').hidden){takeFile(f);return}if(f.type.startsWith('image/')){assetForm('inspo',null,{});takeFile(f)}else if(f.type.startsWith('audio/')){assetForm('music',null,{});takeFile(f)}});
@@ -506,6 +525,39 @@ document.addEventListener('change',e=>{if(e.target.id==='af-file'&&e.target.file
 document.addEventListener('submit',e=>{if(e.target.id!=='af')return;e.preventDefault();saveAssetForm(e.target)});
 document.addEventListener('input',e=>{if(e.target.id==='aq'){UI.aq=e.target.value;saveUI();const pos=e.target.selectionStart;renderAssets();const q=$('#aq');q.focus();try{q.setSelectionRange(pos,pos)}catch(_){}}});
 
+/* ---- Assets: сценарии и генератор промптов ---- */
+const RUBRICS={history:['Unique History','Unique Humans'],whatif:['Creative Situations (что если…)','Every … does (нации и регионы)','Numbers on Head'],gens:['Generation vs Generation','Health',"That's Why"]};
+const FORMATS=[['s60','Shorts до 60 секунд'],['s180','Shorts до 3 минут'],['long','Длинное видео 8–10 минут']];
+const LANGS=[['en','Английский'],['ru','Русский']];
+const TONES=[['mystery','Загадочная, интригующая'],['energy','Энергичная, быстрая'],['calm','Спокойная, рассказчик'],['fun','С юмором']];
+const STAGES=[['draft','Черновик','#9aa3b2'],['ready','Готов к монтажу','#2357ff'],['prod','В монтаже','#ff8a00'],['pub','Опубликован','#00a862']];
+const GEN=()=>{const g=Object.assign({ch:(S.channels[0]||{}).id||'',rubric:'',topic:'',format:'s60',lang:'en',tone:'mystery',extra:''},UI.gen||{});if(!S.channels.some(c=>c.id===g.ch))g.ch=(S.channels[0]||{}).id||'';return g};
+const rubricsOf=ch=>RUBRICS[ch]||[];
+function buildPrompt(g){const c=C(g.ch)||{name:'',niche:''},fm=(FORMATS.find(f=>f[0]===g.format)||FORMATS[0])[1],lang=(LANGS.find(l=>l[0]===g.lang)||LANGS[0])[1],tone=(TONES.find(t=>t[0]===g.tone)||TONES[0])[1],health=/health/i.test(g.rubric||'');
+ return [`Ты сценарист YouTube-канала «${c.name}».`,c.niche?`О канале: ${c.niche}`:'',g.rubric?`Рубрика: ${g.rubric}`:'',
+ `Тема: ${g.topic||'предложи 5 сильных тем для этой рубрики, выбери лучшую и напиши сценарий для неё'}`,`Формат: ${fm}`,`Язык ролика: ${lang}`,`Подача: ${tone}`,g.extra?`Пожелания: ${g.extra}`:'','',
+ 'Сделай по порядку:','1. Три варианта хука на первые 2–3 секунды.','2. Сценарий с таймкодами: текст озвучки и что в это время на экране.','3. Список кадров с промптами для генерации картинок, промпты на английском, в едином стиле канала.','4. Крупные надписи на экране.','5. Пять вариантов названия.','6. Описание для YouTube и 5–10 хэштегов.','7. Идея превью: что на картинке и текст в 2–4 слова.','',
+ 'Факты проверяй. Если в чём-то не уверен, отметь это прямо в сценарии.',health?'Это тема о здоровье: без диагнозов и дозировок, в конце короткий совет обратиться к врачу, если симптом повторяется.':''].filter((l,i,a)=>l!==''||a[i-1]!=='').join('\n').trim()}
+function genPanel(){const g=GEN(),rs=rubricsOf(g.ch);
+ return `<section class="gen"><h3>Генератор сценария</h3><p class="sub">Выберите канал и рубрику, впишите тему. Сайт соберёт подробный запрос, его останется отправить в Claude. Готовый сценарий сохраните в библиотеку ниже.</p>
+ <div class="ggrid"><label>Канал<select class="inp" id="g-ch" data-gen="ch">${opt(S.channels.map(c=>[c.id,c.name]),g.ch)}</select></label>
+ <label>Рубрика<select class="inp" id="g-rubric" data-gen="rubric">${opt([['','Без рубрики'],...rs.map(r=>[r,r])],g.rubric)}</select></label>
+ <label>Формат<select class="inp" data-gen="format">${opt(FORMATS,g.format)}</select></label>
+ <label>Язык ролика<select class="inp" data-gen="lang">${opt(LANGS,g.lang)}</select></label>
+ <label>Подача<select class="inp" data-gen="tone">${opt(TONES,g.tone)}</select></label>
+ <label class="gtopic">Тема<input class="inp" data-gen="topic" value="${esc(g.topic)}" placeholder="Пусто — Claude предложит 5 тем сам"></label>
+ <label class="gfull">Пожелания<input class="inp" data-gen="extra" value="${esc(g.extra)}" placeholder="например, без шока и кликбейта, концовка с вопросом зрителю"></label></div>
+ <div class="acts"><button class="btn primary" data-act="gbuild">Собрать запрос</button><button class="btn" data-act="gcopy">Скопировать</button><button class="btn" data-act="gopen">Открыть в Claude</button><button class="btn" data-act="gapp">В приложении Claude</button><button class="btn sp" data-act="gsave">Сохранить сценарий</button></div>
+ <textarea class="inp gout" id="g-out" readonly aria-label="Готовый запрос для Claude">${esc(buildPrompt(g))}</textarea></section>`}
+function scriptsBody(){const L=aFiltered('script');
+ return genPanel()+`<h3 class="libh">Библиотека сценариев</h3>`+(L.length?`<div class="agrid">${L.map(a=>{const sg=STAGES.find(s=>s[0]===a.stage)||STAGES[0];return `<article class="acard script"><div class="ah"><b>${esc(a.title)}</b></div>
+ <div class="srow">${chTag(a.ch)}${a.rubric?`<span class="sub">${esc(a.rubric)}</span>`:''}<select class="stage" data-sstage="${esc(a.id)}" aria-label="Статус сценария" style="--c:${sg[2]}">${opt(STAGES.map(s=>[s[0],s[1]]),sg[0])}</select></div>
+ ${a.text?`<p class="sprev">${esc(a.text.slice(0,260))}</p>`:''}<div class="acts"><button class="btn" data-act="sview" data-id="${esc(a.id)}">Открыть</button><button class="btn" data-act="stask" data-id="${esc(a.id)}">Создать задачу</button></div>${aMeta(a)}</article>`}).join('')}</div>`:'<div class="empty">Пока нет сценариев. Соберите запрос выше, отправьте в Claude и сохраните результат.</div>')}
+
+document.addEventListener('change',e=>{const el=e.target;
+ if(el.dataset.gen){UI.gen=Object.assign(GEN(),{[el.dataset.gen]:el.value});if(el.dataset.gen==='ch')UI.gen.rubric='';saveUI();if(el.dataset.gen==='ch')renderAssets();else $('#g-out').value=buildPrompt(GEN())}
+ else if(el.dataset.sstage&&db){db.collection('tasks').doc(el.dataset.sstage).update({stage:el.value}).then(()=>toast('Статус сценария обновлён')).catch(()=>toast('Не удалось сохранить'))}});
+document.addEventListener('input',e=>{const el=e.target;if(el.dataset.gen&&el.tagName==='INPUT'){UI.gen=Object.assign(GEN(),{[el.dataset.gen]:el.value});saveUI();const o=$('#g-out');if(o)o.value=buildPrompt(GEN())}});
 /* ---- отрисовка ---- */
 function match(t){const q=UI.q.trim().toLowerCase();return(!UI.hot||isHot(t))&&(!UI.who||has(t,UI.who))&&(UI.ch==='*'||t.ch===UI.ch)&&(!q||(t.title+' '+(t.desc||'')).toLowerCase().includes(q))}
 function card(t){const n=(t.comments||[]).length;
@@ -582,9 +634,17 @@ else if(a==='ch'){UI.ch=UI.ch===id&&id!=='*'?'*':id;saveUI();render()}
 else if(a==='hot'){UI.hot=!UI.hot;saveUI();render()}
 else if(a==='new'){if(!canEdit())return;const pre={status:b.dataset.st||'todo'};if(b.dataset.who)pre.who=[b.dataset.who];openTask(null,pre)}
 else if(a==='open')openTask(id);
+else if(a==='gbuild'){$('#g-out').value=buildPrompt(GEN());toast('Запрос собран')}
+else if(a==='gcopy'){const t=buildPrompt(GEN());$('#g-out').value=t;(navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).then(()=>toast('Запрос скопирован, вставьте его в Claude')).catch(()=>{const o=$('#g-out');o.focus();o.select();toast('Выделил текст, нажмите Ctrl+C')})}
+else if(a==='gopen'){window.open('https://claude.ai/new?q='+encodeURIComponent(buildPrompt(GEN())),'_blank','noopener')}
+else if(a==='gapp'){location.href='claude://claude.ai/new?q='+encodeURIComponent(buildPrompt(GEN()))}
+else if(a==='gsave'){const g=GEN();assetForm('script',null,{ch:g.ch,rubric:g.rubric,topic:g.topic,title:g.topic})}
+else if(a==='sview'){const x=AS.find(x=>x.id===id);if(!x)return;modal(`<div class="wrap"><div class="mh"><h2>${esc(x.title)}</h2><button class="x" data-act="close" aria-label="Закрыть">×</button></div><div class="srow">${chTag(x.ch)}${x.rubric?`<span class="sub">${esc(x.rubric)}</span>`:''}${x.topic?`<span class="sub">Тема: ${esc(x.topic)}</span>`:''}</div><pre class="stextv">${esc(x.text||'Текст пока не вставлен')}</pre><div class="acts"><button class="btn primary" data-act="scopy" data-id="${esc(x.id)}">Скопировать текст</button><button class="btn" data-act="aedit" data-id="${esc(x.id)}">Изменить</button></div></div>`)}
+else if(a==='scopy'){const x=AS.find(x=>x.id===id);if(x&&navigator.clipboard)navigator.clipboard.writeText(x.text||'').then(()=>toast('Текст скопирован')).catch(()=>toast('Не удалось скопировать'))}
+else if(a==='stask'){const x=AS.find(x=>x.id===id);if(!x)return;const nid=uid();change(s=>{s.tasks.push({id:nid,title:'Видео: '+x.title,desc:'Сценарий лежит в Assets → Сценарии: «'+x.title+'».'+(x.rubric?' Рубрика: '+x.rubric+'.':''),who:[],ch:x.ch||'',type:'Монтаж',prio:2,due:'',dueTime:'',after:'',status:'todo',comments:[],created:TODAY,by:me||'',order:maxOrderIn(s,'todo',nid)+1})},'Задача создана на доске в колонке «К работе»')}
 else if(a==='asub'){UI.asub=id;saveUI();render()}
 else if(a==='ach'){UI.ach=(UI.ach||'*')===id&&id!=='*'?'*':id;saveUI();render()}
-else if(a==='anew'){const s=UI.asub||'comp';assetForm(s==='comp'?'competitor':s==='music'?'music':'inspo')}
+else if(a==='anew'){const s=UI.asub||'scripts';assetForm(s==='scripts'?'script':s==='comp'?'competitor':s==='music'?'music':'inspo')}
 else if(a==='aedit'){const x=AS.find(x=>x.id===id);if(x)assetForm(x.kind,x)}
 else if(a==='adel'){const x=AS.find(x=>x.id===id);if(!x)return;if(!b.dataset.sure){b.dataset.sure='1';b.textContent='Точно удалить?';return}
  delFile(x).then(()=>db.collection('tasks').doc(x.id).delete()).then(()=>toast('Удалено')).catch(()=>toast('Не удалось удалить'))}
@@ -631,7 +691,7 @@ document.addEventListener('change',e=>{const el=e.target,d=el.dataset,v=el.value
 if(d.role)change(x=>{const p=x.people.find(p=>p.id===d.role);if(p)p.role=v.trim()},'Роль сохранена');
 else if(d.duties)change(x=>{const p=x.people.find(p=>p.id===d.duties);if(p)p.duties=v.trim()},'Сохранено');
 else if(d.flow){const i=+d.flow;change(x=>{if(x.flow[i])x.flow[i].who=v},'Ответственный изменён')}});
-document.addEventListener('focusout',e=>{if(dirtyTeam&&e.target.closest&&e.target.closest('#team'))setTimeout(()=>{const ae=document.activeElement;if(!(ae&&ae.closest&&ae.closest('#team input,#team textarea,#team select')))render()},50)});
+document.addEventListener('focusout',e=>{if(dirtyTeam&&e.target.closest&&e.target.closest('#team,#assets'))setTimeout(()=>{const ae=document.activeElement;if(!(ae&&ae.closest&&ae.closest('#team input,#team textarea,#team select,#assets input,#assets textarea,#assets select')))render()},50)});
 document.addEventListener('input',e=>{if(e.target.id==='q'){UI.q=e.target.value;saveUI();renderBoard()}else if(e.target.dataset.chn&&CH)CH[+e.target.dataset.chn].name=e.target.value;else if(e.target.dataset.chniche&&CH)CH[+e.target.dataset.chniche].niche=e.target.value});
 document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!$('#modal').hidden&&me)close();else if(e.key==='Enter'&&e.target.classList&&e.target.classList.contains('card'))openTask(e.target.dataset.id)});
 const bd=$('#board');
