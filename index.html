@@ -182,6 +182,48 @@ textarea.inp{min-height:84px;resize:vertical}
 .wp[aria-pressed=true]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
 .avs{display:inline-flex}
 .avs .av+.av{margin-left:-7px;box-shadow:0 0 0 2px var(--card)}
+.assets{padding-block:6px 96px;display:grid;gap:14px}
+.ahead{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.ahead h2{font-size:32px;margin:0;font-weight:800;letter-spacing:-.02em;margin-right:auto}
+.asubs{display:flex;gap:4px;background:var(--col);padding:4px;border-radius:12px;overflow-x:auto;justify-self:start;max-width:100%}
+.asubs button{flex:none;border:0;background:none;padding:8px 14px;border-radius:9px;min-height:40px;font-weight:600;color:var(--mute);display:inline-flex;gap:6px;align-items:center;white-space:nowrap}
+.asubs button[aria-selected=true]{background:var(--card);color:var(--ink);box-shadow:0 1px 3px #0003}
+.assets .filters{padding:0}
+#aq{flex:1 1 200px;max-width:300px;min-height:44px;border:1px solid var(--line);border-radius:10px;padding:8px 12px;background:var(--card);font-size:16px}
+.chipsrow{display:flex;flex-wrap:wrap;gap:6px}
+.agrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,300px),1fr));gap:12px}
+.acard{border:1px solid var(--line);border-radius:14px;padding:14px;background:var(--card);display:grid;gap:8px;align-content:start}
+.acard p{margin:0;font-size:15px}
+.ah{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
+.ah b{font-size:19px;font-weight:800}
+.k{display:block;font-size:12px;color:var(--mute);font-weight:600}
+.alink{font-size:14px;font-weight:600;color:var(--focus);overflow-wrap:anywhere}
+.ameta{display:flex;flex-wrap:wrap;align-items:center;gap:6px 10px;font-size:13px;color:var(--mute);border-top:1px solid var(--line);padding-top:8px;margin-top:2px}
+.aact{margin-left:auto;display:flex;gap:10px}
+.lnk{border:0;background:none;padding:6px 0;font-size:13px;font-weight:600;color:var(--focus);cursor:pointer;min-height:32px}
+.lnk.danger{color:var(--red)}
+.igrid{columns:4 220px;column-gap:12px}
+.icard{break-inside:avoid;margin-bottom:12px;border:1px solid var(--line);border-radius:14px;background:var(--card);overflow:hidden}
+.ithumb{display:block;width:100%;border:0;padding:0;background:var(--col);cursor:zoom-in}
+.ithumb img{display:block;width:100%;height:auto}
+.ibody{padding:10px 12px;display:grid;gap:6px}
+.ibody p{margin:0;font-size:14px}
+.mlist{display:grid;gap:8px}
+.mrow{display:grid;grid-template-columns:48px minmax(0,1fr) auto;gap:12px;align-items:center;border:1px solid var(--line);border-radius:14px;padding:10px 12px;background:var(--card)}
+.mmain{display:grid;gap:2px}
+.mmain b{font-weight:700}
+.play{width:48px;height:48px;border-radius:50%;border:0;background:var(--red);color:#fff;font-size:18px;display:grid;place-items:center}
+.play.off{background:var(--col);color:var(--mute)}
+.drop{border:2px dashed var(--line);border-radius:14px;padding:16px;display:flex;flex-wrap:wrap;gap:6px;align-items:center;justify-content:center;text-align:center;color:var(--mute);min-height:110px}
+.drop img{max-width:100%;max-height:260px;border-radius:8px;display:block}
+.lb{background:var(--col);border-radius:12px;display:grid;place-items:center;min-height:200px}
+.lb img{max-width:100%;max-height:70vh;border-radius:12px;display:block}
+.player{position:fixed;left:50%;transform:translateX(-50%);bottom:16px;z-index:15;background:var(--card);border:1px solid var(--line);border-radius:16px;box-shadow:0 10px 30px #0004;padding:10px 12px;display:flex;align-items:center;gap:12px;width:min(640px,calc(100% - 24px))}
+.player b{flex:none;max-width:30%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.player audio{flex:1;min-width:0;height:40px}
+.player .x{margin-left:0}
+#player:not([hidden])~#toast{bottom:96px}
+@media(max-width:600px){.mrow{grid-template-columns:44px minmax(0,1fr)}.mrow>.btn{grid-column:2;justify-self:start}.play{width:44px;height:44px}}
 .presets{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-top:-4px}
 .hotc[aria-pressed=true]{background:var(--red);border-color:var(--red);color:#fff}
 .chrow .chniche{grid-column:1/-1;min-height:64px}
@@ -198,7 +240,7 @@ textarea.inp{min-height:84px;resize:vertical}
 <p id="banner" class="banner band" hidden></p>
 <header class="top band">
 <div class="brand"><span class="rec" aria-hidden="true"></span><h1>Доска студии</h1></div>
-<nav class="tabs" aria-label="Разделы"><button data-act="view" data-view="board">Доска задач</button><button data-act="view" data-view="team">Команда и роли</button><button data-act="view" data-view="calls">Созвоны</button><button data-act="view" data-view="guide">Работа с Claude</button></nav>
+<nav class="tabs" aria-label="Разделы"><button data-act="view" data-view="board">Доска задач</button><button data-act="view" data-view="team">Команда и роли</button><button data-act="view" data-view="calls">Созвоны</button><button data-act="view" data-view="assets">Assets</button><button data-act="view" data-view="guide">Работа с Claude</button></nav>
 <div class="right"><span id="online" class="online"></span><span id="sync">Подключаюсь…</span><button class="btn" id="meBtn" data-act="me">Кто я?</button><button class="btn" data-act="channels">Каналы</button><button class="btn primary" data-act="new">+ Новая задача</button></div>
 </header>
 <div id="alert" class="alert band" hidden role="status"></div>
@@ -207,6 +249,7 @@ textarea.inp{min-height:84px;resize:vertical}
 <main id="board" class="board" aria-label="Доска задач"></main>
 <main id="team" class="team band" hidden></main>
 <main id="calls" class="calls band" hidden></main>
+<main id="assets" class="assets band" hidden></main>
 <main id="guide" class="guide band" hidden>
 <section><h2>Как мы делаем видео с Claude</h2><p class="sub" style="margin-top:6px">Схема на старте. Меняем её, когда найдём способ лучше.</p></section>
 <ol class="gsteps">
@@ -220,6 +263,7 @@ textarea.inp{min-height:84px;resize:vertical}
 <div class="gnote"><h3>Порядок задач</h3><p>Said создаёт каналы → Emir загружает оформление, Almaz делает платформу загрузки → публикация из чата. Сценарии Almanbet и проекты Claude можно делать параллельно. На доске такие связи видны по пометке «После: …» на карточке.</p></div>
 </main>
 <p class="note band" id="note">Задачи на старте разложены по ролям, их можно менять. Срок ставится в задаче: датой или кнопками «Завтра», «Через неделю». «Горят сроки» показывает просроченное и то, что надо сдать в ближайшие два дня. Задачи перетаскиваются между колонками мышкой, на телефоне статус меняется внутри задачи.</p>
+<div id="player" class="player" hidden></div>
 <div id="modal" class="modal" hidden><div class="sheet" id="sheet" role="dialog" aria-modal="true"></div></div>
 <div id="toast" role="status"></div>
 
@@ -304,7 +348,8 @@ function startFb(){try{firebase.initializeApp(FIREBASE_CONFIG);db=firebase.fires
  sync('load');S=fresh();S.tasks=[];render();
  db.collection('studio').doc('meta').onSnapshot(s=>{if(!s.exists){migrate();return}const d=s.data();S.people=d.people||[];S.channels=d.channels||[];S.flow=d.flow||[];S.calls=d.calls||DEF_CALLS;S.poll=d.poll||null;metaReady=true;redraw();maybePoll()},fail);
  db.collection('studio').doc('presence').onSnapshot(s=>{PRES=s.exists?s.data({serverTimestamps:'estimate'}):{};redraw()},()=>{});beat(true);
- db.collection('tasks').onSnapshot({includeMetadataChanges:true},q=>{S.tasks=q.docs.map(d=>Object.assign({comments:[]},d.data(),{id:d.id}));tasksReady=true;sync(q.metadata.hasPendingWrites?'pend':'ok');redraw()},fail)}
+ startAssets();
+ db.collection('tasks').where('status','in',COLS.map(c=>c[0])).onSnapshot({includeMetadataChanges:true},q=>{S.tasks=q.docs.map(d=>Object.assign({comments:[]},d.data(),{id:d.id}));tasksReady=true;sync(q.metadata.hasPendingWrites?'pend':'ok');redraw()},fail)}
 function startLocal(){const L=st('studio-board');if(L&&L.tasks&&(L.seedV||1)>=SEED.v)S=L;else{S=fresh();st('studio-board',S)}
  S.calls=S.calls||DEF_CALLS;$('#banner').innerHTML='<b>База не подключена.</b> Задачи сохраняются только в этом браузере.';$('#banner').hidden=false;sync('local');render();maybePoll()}
 function redraw(){const ae=document.activeElement;if(UI.view==='team'&&ae&&ae.closest&&ae.closest('#team')){dirtyTeam=true;renderBoardSide();return}render();
@@ -389,6 +434,78 @@ setInterval(()=>{if(!document.hidden)beat(true)},45000);
 document.addEventListener('visibilitychange',()=>beat(!document.hidden));
 window.addEventListener('pagehide',()=>beat(false));
 
+/* ---- Assets: конкуренты, вдохновение, музыка ---- */
+let AS=[],AEDIT=null,APEND=null,AUDIO={};
+const ASUBS=[['comp','Конкуренты'],['inspo','Вдохновение'],['music','Музыка для монтажа']];
+const CHUNK=800000,MAXMUSIC=15*1024*1024;
+const okImg=s=>typeof s==='string'&&/^data:image\/(jpeg|png|webp|gif);base64,/.test(s);
+const host=u=>{try{return new URL(u).hostname.replace(/^www\./,'')}catch(e){return''}};
+const aUid=()=>'a'+Date.now().toString(36)+Math.random().toString(36).slice(2,6);
+const fsize=n=>n>1048576?(n/1048576).toFixed(1)+' МБ':Math.max(1,Math.round(n/1024))+' КБ';
+const readURL=f=>new Promise((ok,no)=>{const r=new FileReader();r.onload=()=>ok(r.result);r.onerror=no;r.readAsDataURL(f)});
+async function prepImage(file){const bmp=await createImageBitmap(file);const mk=(max,q)=>{const s=Math.min(1,max/Math.max(bmp.width,bmp.height)),c=document.createElement('canvas');c.width=Math.max(1,Math.round(bmp.width*s));c.height=Math.max(1,Math.round(bmp.height*s));const x=c.getContext('2d');x.fillStyle='#fff';x.fillRect(0,0,c.width,c.height);x.drawImage(bmp,0,0,c.width,c.height);return c.toDataURL('image/jpeg',q)};return{full:mk(1600,.85),thumb:mk(480,.72)}}
+async function putFile(fid,str){const n=Math.ceil(str.length/CHUNK);for(let i=0;i<n;i++){if(n>2)toast(`Загружаю ${i+1} из ${n}…`);await db.collection('tasks').doc(fid+'_'+i).set({status:'file',title:'file',d:str.slice(i*CHUNK,(i+1)*CHUNK),i,n})}return n}
+async function getFile(a){const ps=await Promise.all(Array.from({length:a.parts||0},(_,i)=>db.collection('tasks').doc(a.fileId+'_'+i).get()));return ps.map(p=>p.exists?p.data().d:'').join('')}
+async function delFile(a){if(!a.fileId)return;const b=db.batch();for(let i=0;i<(a.parts||0);i++)b.delete(db.collection('tasks').doc(a.fileId+'_'+i));await b.commit()}
+function aFiltered(kind){const q=(UI.aq||'').trim().toLowerCase(),ch=UI.ach||'*';return AS.filter(a=>a.kind===kind&&(ch==='*'||a.ch===ch)&&(!q||[a.title,a.niche,a.style,a.note,a.url].join(' ').toLowerCase().includes(q))).sort((x,y)=>(y.at||0)-(x.at||0))}
+function aMeta(a){return `<div class="ameta">${chTag(a.ch)}<span>${esc(P(a.by)?P(a.by).name:'')}${a.at?', '+fd(ymd(new Date(a.at))):''}</span><span class="aact"><button class="lnk" data-act="aedit" data-id="${esc(a.id)}">Изменить</button><button class="lnk danger" data-act="adel" data-id="${esc(a.id)}">Удалить</button></span></div>`}
+const aLink=a=>a.url&&/^https:\/\//i.test(a.url)?`<a class="alink" href="${esc(a.url)}" target="_blank" rel="noopener">${esc(host(a.url)||'ссылка')}</a>`:(a.url?`<span class="sub">${esc(a.url)}</span>`:'');
+function renderAssets(){const sub=ASUBS.some(s=>s[0]===UI.asub)?UI.asub:'comp',chs=[['*','Все каналы',null],...S.channels.map(c=>[c.id,c.name,c.color]),['','Общее','#9aa3b2']];
+ let body='';
+ if(mode!=='fb')body='<p class="sub">Assets работают, когда сайт подключён к базе.</p>';
+ else if(sub==='comp'){const L=aFiltered('competitor');body=L.length?`<div class="agrid">${L.map(a=>`<article class="acard"><div class="ah"><b>${esc(a.title)}</b>${a.subs?`<span class="sub">${esc(a.subs)}</span>`:''}</div>${aLink(a)}
+  ${a.niche?`<p><span class="k">Ниша</span>${esc(a.niche)}</p>`:''}${a.style?`<p><span class="k">Стиль</span>${esc(a.style)}</p>`:''}${a.note?`<p><span class="k">Что взять</span>${esc(a.note)}</p>`:''}${aMeta(a)}</article>`).join('')}</div>`:'<div class="empty">Пока пусто. Добавьте первого конкурента: ссылку на канал, нишу и стиль.</div>'}
+ else if(sub==='inspo'){const L=aFiltered('inspo');body=`<p class="sub">Вставьте картинку или ссылку прямо на этой странице через Ctrl+V (на Mac Cmd+V) или перетащите файл сюда.</p>`+(L.length?`<div class="igrid">${L.map(a=>`<article class="icard">${okImg(a.thumb)?`<button class="ithumb" data-act="aview" data-id="${esc(a.id)}" aria-label="Открыть картинку"><img src="${a.thumb}" alt="${esc(a.title||'картинка')}" loading="lazy"></button>`:''}
+  <div class="ibody">${a.title?`<b>${esc(a.title)}</b>`:''}${aLink(a)}${a.note?`<p>${esc(a.note)}</p>`:''}${aMeta(a)}</div></article>`).join('')}</div>`:'<div class="empty">Пока пусто. Вставьте сюда картинку или ссылку.</div>')}
+ else{const L=aFiltered('music');body=`<p class="sub">Треки для монтажа: слушайте прямо здесь и скачивайте для CapCut или Premiere. Файл до 15 МБ, можно и просто ссылкой.</p>`+(L.length?`<div class="mlist">${L.map(a=>`<article class="mrow">${a.fileId?`<button class="play" data-act="aplay" data-id="${esc(a.id)}" aria-label="Слушать">${AUDIO[a.id]?'■':'▶'}</button>`:'<span class="play off">♪</span>'}
+  <div class="mmain"><b>${esc(a.title)}</b><span class="sub">${[a.note,a.fileName&&fsize(a.size||0)].filter(Boolean).map(esc).join(' · ')}</span>${aLink(a)}<div id="au-${esc(a.id)}"></div>${aMeta(a)}</div>${a.fileId?`<button class="btn" data-act="adl" data-id="${esc(a.id)}">Скачать</button>`:''}</article>`).join('')}</div>`:'<div class="empty">Пока пусто. Загрузите первый трек.</div>')}
+ $('#assets').innerHTML=`<div class="ahead"><h2>Assets</h2><button class="btn primary" data-act="anew">+ Добавить</button></div>
+ <div class="asubs" role="tablist">${ASUBS.map(([k,n])=>`<button role="tab" data-act="asub" data-id="${k}" aria-selected="${k===sub}">${n}<span class="cnt">${AS.filter(a=>a.kind===({comp:'competitor',inspo:'inspo',music:'music'})[k]).length}</span></button>`).join('')}</div>
+ <div class="filters"><input id="aq" type="search" placeholder="Поиск" aria-label="Поиск по assets" value="${esc(UI.aq||'')}"><div class="chipsrow">${chs.map(([id,n,c])=>`<button class="chip" data-act="ach" data-id="${esc(id)}" aria-pressed="${(UI.ach||'*')===id}">${c?`<i class="dot" style="--c:${col(c)}"></i>`:''}${esc(n)}</button>`).join('')}</div></div>${body}`}
+function assetForm(kind,a,pre){a=a||{};pre=pre||{};APEND=pre.file?pre:null;const chSel=`<label>Наш канал<select class="inp" id="af-ch">${opt([['','Общее'],...S.channels.map(c=>[c.id,c.name])],a.ch!==undefined?a.ch:(UI.ach&&UI.ach!=='*'?UI.ach:''))}</select></label>`;
+ const T={competitor:'Конкурент',inspo:'Вдохновение',music:'Трек для монтажа'}[kind];let f='';
+ if(kind==='competitor')f=`<label>Название канала<input class="inp" id="af-title" value="${esc(a.title||'')}" placeholder="Например: Kurzgesagt"></label><label>Ссылка на канал<input class="inp" id="af-url" value="${esc(a.url||pre.url||'')}" placeholder="https://www.youtube.com/@…"></label>
+  <div class="grid2">${chSel}<label>Подписчики<input class="inp" id="af-subs" value="${esc(a.subs||'')}" placeholder="например, 1,2 млн"></label></div>
+  <label>Ниша<input class="inp" id="af-niche" value="${esc(a.niche||'')}"></label><label>Стиль<textarea class="inp" id="af-style" placeholder="Визуал, голос, темп, превью">${esc(a.style||'')}</textarea></label><label>Что взять для нас<textarea class="inp" id="af-note">${esc(a.note||'')}</textarea></label>`;
+ else if(kind==='inspo')f=`<div class="drop" id="af-drop">${okImg(pre.thumb||a.thumb)?`<img src="${pre.thumb||a.thumb}" alt="">`:'<span>Вставьте картинку (Ctrl+V), перетащите её сюда или</span>'}<label class="lnk">выберите файл<input type="file" id="af-file" accept="image/*" hidden></label></div>
+  <label>Ссылка<input class="inp" id="af-url" value="${esc(a.url||pre.url||'')}" placeholder="https://…"></label><label>Подпись<input class="inp" id="af-title" value="${esc(a.title||'')}" placeholder="Что это и чем нравится"></label><label>Заметка<textarea class="inp" id="af-note">${esc(a.note||'')}</textarea></label>${chSel}`;
+ else f=`<div class="drop" id="af-drop"><span id="af-fname">${esc(pre.file?pre.file.name:(a.fileName||'Перетащите аудиофайл сюда или'))}</span><label class="lnk">выберите файл<input type="file" id="af-file" accept="audio/*" hidden></label></div>
+  <label>Название<input class="inp" id="af-title" value="${esc(a.title||'')}"></label><label>Настроение, где использовать<input class="inp" id="af-note" value="${esc(a.note||'')}" placeholder="например, напряжённая, для хука"></label><label>Или ссылка на трек<input class="inp" id="af-url" value="${esc(a.url||pre.url||'')}" placeholder="https://…"></label>${chSel}`;
+ modal(`<form id="af" data-kind="${kind}" data-id="${esc(a.id||'')}"><div class="mh"><h2>${a.id?'Изменить':'Добавить'}: ${T}</h2><button type="button" class="x" data-act="close" aria-label="Закрыть">×</button></div>${f}
+ <div class="acts"><button class="btn primary" type="submit" id="af-save">Сохранить</button><button class="btn" type="button" data-act="close">Отмена</button></div></form>`)}
+async function takeFile(file){const form=$('#af');if(!form||!file)return;const kind=form.dataset.kind;
+ if(kind==='inspo'&&file.type.startsWith('image/')){try{const im=await prepImage(file);APEND={file,thumb:im.thumb,full:im.full};$('#af-drop').innerHTML=`<img src="${im.thumb}" alt="">`}catch(e){toast('Не получилось открыть картинку')}}
+ else if(kind==='music'&&file.type.startsWith('audio/')){if(file.size>MAXMUSIC){toast('Файл больше 15 МБ, сожмите его или дайте ссылку');return}APEND={file};$('#af-fname').textContent=file.name+' · '+fsize(file.size)}
+ else toast(kind==='music'?'Нужен аудиофайл':'Нужна картинка')}
+async function saveAssetForm(form){if(!db){toast('Нет связи с базой');return}const kind=form.dataset.kind,id=form.dataset.id||aUid(),old=AS.find(x=>x.id===id),btn=$('#af-save');
+ const v={kind,status:'asset',title:(g('af-title')||'').trim(),url:(g('af-url')||'').trim(),note:(g('af-note')||'').trim(),ch:g('af-ch')||''};
+ if(kind==='competitor'){v.niche=g('af-niche').trim();v.style=g('af-style').trim();v.subs=g('af-subs').trim()}
+ if(kind==='competitor'&&!v.title){toast('Впишите название канала');return}
+ if(kind==='inspo'&&!v.url&&!(APEND&&APEND.full)&&!(old&&old.thumb)){toast('Добавьте картинку или ссылку');return}
+ if(kind==='music'&&!v.url&&!(APEND&&APEND.file)&&!(old&&old.fileId)){toast('Загрузите трек или дайте ссылку');return}
+ if(kind==='music'&&!v.title)v.title=APEND&&APEND.file?APEND.file.name.replace(/\.[^.]+$/,''):(old&&old.title)||host(v.url)||'Трек';
+ btn.disabled=true;btn.textContent='Сохраняю…';
+ try{if(!old){v.by=me||'';v.at=Date.now()}
+  if(APEND&&APEND.file){if(old)await delFile(old);const fid=id+'_f';
+   const str=kind==='inspo'?APEND.full:await readURL(APEND.file);
+   v.fileId=fid;v.parts=await putFile(fid,str);v.fileName=APEND.file.name||'image.jpg';v.fileType=APEND.file.type||'';v.size=APEND.file.size||str.length;if(kind==='inspo')v.thumb=APEND.thumb}
+  await db.collection('tasks').doc(id).set(v,{merge:true});APEND=null;close();toast('Сохранено в Assets')}
+ catch(e){console.error(e);btn.disabled=false;btn.textContent='Сохранить';toast('Не удалось сохранить, проверьте интернет')}}
+async function assetBlobURL(a){const s=await getFile(a);if(!s)throw new Error('empty');const r=await fetch(s);return URL.createObjectURL(await r.blob())}
+function startAssets(){db.collection('tasks').where('status','==','asset').onSnapshot(q=>{AS=q.docs.map(d=>Object.assign({},d.data(),{id:d.id}));if(UI.view==='assets'){const ae=document.activeElement;if(ae&&ae.id==='aq')return;redraw()}},e=>console.error(e))}
+document.addEventListener('paste',async e=>{const cd=e.clipboardData;if(!cd)return;const files=[...cd.files||[]];
+ if($('#af')&&!$('#modal').hidden){if(files.length){e.preventDefault();takeFile(files[0])}return}
+ if(UI.view!=='assets'||!$('#modal').hidden)return;const ae=document.activeElement;if(ae&&ae.matches&&ae.matches('input,textarea'))return;
+ const img=files.find(f=>f.type.startsWith('image/')),aud=files.find(f=>f.type.startsWith('audio/')),txt=(cd.getData('text')||'').trim();
+ if(img){e.preventDefault();assetForm('inspo',null,{});takeFile(img)}else if(aud){e.preventDefault();assetForm('music',null,{});takeFile(aud)}
+ else if(/^https?:\/\//i.test(txt)){e.preventDefault();const sub=UI.asub||'comp';assetForm(sub==='comp'?'competitor':sub==='music'?'music':'inspo',null,{url:txt})}});
+document.addEventListener('dragover',e=>{if(UI.view==='assets'||$('#af'))e.preventDefault()});
+document.addEventListener('drop',e=>{if(!(UI.view==='assets'||$('#af')))return;if(e.target.closest&&e.target.closest('#board'))return;const f=[...(e.dataTransfer&&e.dataTransfer.files||[])][0];if(!f)return;e.preventDefault();
+ if($('#af')&&!$('#modal').hidden){takeFile(f);return}if(f.type.startsWith('image/')){assetForm('inspo',null,{});takeFile(f)}else if(f.type.startsWith('audio/')){assetForm('music',null,{});takeFile(f)}});
+document.addEventListener('change',e=>{if(e.target.id==='af-file'&&e.target.files[0])takeFile(e.target.files[0])});
+document.addEventListener('submit',e=>{if(e.target.id!=='af')return;e.preventDefault();saveAssetForm(e.target)});
+document.addEventListener('input',e=>{if(e.target.id==='aq'){UI.aq=e.target.value;saveUI();const pos=e.target.selectionStart;renderAssets();const q=$('#aq');q.focus();try{q.setSelectionRange(pos,pos)}catch(_){}}});
+
 /* ---- отрисовка ---- */
 function match(t){const q=UI.q.trim().toLowerCase();return(!UI.hot||isHot(t))&&(!UI.who||has(t,UI.who))&&(UI.ch==='*'||t.ch===UI.ch)&&(!q||(t.title+' '+(t.desc||'')).toLowerCase().includes(q))}
 function card(t){const n=(t.comments||[]).length;
@@ -413,8 +530,8 @@ return `<section class="pcard"><div class="ph">${avOn(p,'xl')}<div><b>${esc(p.na
 const chs=`<section><h2>Каналы и ниши</h2><div class="cgrid">${S.channels.map(c=>{const ts=S.tasks.filter(t=>t.ch===c.id),dn=ts.filter(t=>t.status==='done').length;return `<div class="ccard" style="--c:${col(c.color)}"><div class="sh"><i class="dot"></i><b>${esc(c.name)}</b><span class="sub" style="margin-left:auto">${dn} из ${ts.length} готово</span></div><div class="bar"><i style="--c:${col(c.color)};width:${ts.length?dn/ts.length*100:0}%"></i></div><p>${esc(c.niche||'Ниша не описана')}</p></div>`}).join('')}</div><p class="sub" style="margin-top:8px">Названия и ниши меняются кнопкой «Каналы» вверху.</p></section>`;
 $('#team').innerHTML=chs+flow+`<section><h2>Люди и задачи</h2><p class="sub" style="margin-bottom:12px">У каждого может быть несколько ролей: задачу можно дать любому, а роли ниже показывают, кто за что отвечает в первую очередь.</p><div class="pgrid">${cards}</div></section>`}
 function render(){document.querySelectorAll('.tabs button').forEach(b=>b.setAttribute('aria-selected',b.dataset.view===UI.view));
-const v=['board','team','calls','guide'].includes(UI.view)?UI.view:'board',b=v==='board';$('#board').hidden=!b;$('#tools').hidden=!b;$('#note').hidden=!b;$('#team').hidden=v!=='team';$('#calls').hidden=v!=='calls';$('#guide').hidden=v!=='guide';
-if(b){renderPeople();renderChips();renderBoard()}else if(v==='team')renderTeam();else if(v==='calls')renderCalls();dirtyTeam=false;renderBoardSide();renderAlert();renderOnline();
+const v=['board','team','calls','assets','guide'].includes(UI.view)?UI.view:'board',b=v==='board';$('#board').hidden=!b;$('#tools').hidden=!b;$('#note').hidden=!b;$('#team').hidden=v!=='team';$('#calls').hidden=v!=='calls';$('#guide').hidden=v!=='guide';$('#assets').hidden=v!=='assets';
+if(b){renderPeople();renderChips();renderBoard()}else if(v==='team')renderTeam();else if(v==='calls')renderCalls();else if(v==='assets')renderAssets();dirtyTeam=false;renderBoardSide();renderAlert();renderOnline();
 if(document.activeElement!==$('#q'))$('#q').value=UI.q}
 const saveUI=()=>st('studio-ui',UI);
 
@@ -465,6 +582,19 @@ else if(a==='ch'){UI.ch=UI.ch===id&&id!=='*'?'*':id;saveUI();render()}
 else if(a==='hot'){UI.hot=!UI.hot;saveUI();render()}
 else if(a==='new'){if(!canEdit())return;const pre={status:b.dataset.st||'todo'};if(b.dataset.who)pre.who=[b.dataset.who];openTask(null,pre)}
 else if(a==='open')openTask(id);
+else if(a==='asub'){UI.asub=id;saveUI();render()}
+else if(a==='ach'){UI.ach=(UI.ach||'*')===id&&id!=='*'?'*':id;saveUI();render()}
+else if(a==='anew'){const s=UI.asub||'comp';assetForm(s==='comp'?'competitor':s==='music'?'music':'inspo')}
+else if(a==='aedit'){const x=AS.find(x=>x.id===id);if(x)assetForm(x.kind,x)}
+else if(a==='adel'){const x=AS.find(x=>x.id===id);if(!x)return;if(!b.dataset.sure){b.dataset.sure='1';b.textContent='Точно удалить?';return}
+ delFile(x).then(()=>db.collection('tasks').doc(x.id).delete()).then(()=>toast('Удалено')).catch(()=>toast('Не удалось удалить'))}
+else if(a==='aview'){const x=AS.find(x=>x.id===id);if(!x)return;modal(`<div class="wrap"><div class="mh"><h2>${esc(x.title||'Картинка')}</h2><button class="x" data-act="close" aria-label="Закрыть">×</button></div><div class="lb"><img id="lbimg" alt="${esc(x.title||'')}"></div>${aLink(x)}${x.note?`<p class="sub">${esc(x.note)}</p>`:''}</div>`);
+ const im=$('#lbimg');if(okImg(x.thumb))im.src=x.thumb;if(x.fileId)getFile(x).then(s=>{if(okImg(s)&&$('#lbimg'))$('#lbimg').src=s}).catch(()=>{})}
+else if(a==='aplay'){const x=AS.find(x=>x.id===id);if(!x)return;const pl=$('#player');
+ if(AUDIO[id]){pl.hidden=true;pl.innerHTML='';URL.revokeObjectURL(AUDIO[id]);AUDIO={};render();return}
+ Object.values(AUDIO).forEach(u=>URL.revokeObjectURL(u));AUDIO={};toast('Загружаю трек…');
+ assetBlobURL(x).then(u=>{AUDIO[id]=u;pl.innerHTML='';const t=document.createElement('b');t.textContent=x.title;const au=document.createElement('audio');au.controls=true;au.autoplay=true;au.src=u;const c=document.createElement('button');c.className='x';c.textContent='×';c.setAttribute('aria-label','Закрыть плеер');c.dataset.act='aplay';c.dataset.id=id;pl.append(t,au,c);pl.hidden=false;render()}).catch(()=>toast('Не удалось загрузить трек'))}
+else if(a==='adl'){const x=AS.find(x=>x.id===id);if(!x)return;toast('Готовлю файл…');assetBlobURL(x).then(u=>{const l=document.createElement('a');l.href=u;l.download=x.fileName||(x.title+'.mp3');document.body.append(l);l.click();l.remove();setTimeout(()=>URL.revokeObjectURL(u),60000)}).catch(()=>toast('Не удалось скачать'))}
 else if(a==='wp'){b.setAttribute('aria-pressed',b.getAttribute('aria-pressed')!=='true')}
 else if(a==='wpall'){const bs=[...document.querySelectorAll('#f-who .wp[data-id]')],all=bs.every(x=>x.getAttribute('aria-pressed')==='true');bs.forEach(x=>x.setAttribute('aria-pressed',!all))}
 else if(a==='due'){const d=b.dataset.d;$('#f-due').value=d===''?'':addDays(+d);if(d==='')$('#f-time').value=''}
