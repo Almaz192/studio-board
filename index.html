@@ -244,6 +244,35 @@ textarea.stext{min-height:280px}
 .btn:disabled{opacity:.35;cursor:default}
 .lock{font-size:12px;color:var(--mute);white-space:nowrap;padding:0 6px}
 .warn{color:var(--red)}
+.pill{display:inline-flex;align-items:center;gap:6px;min-height:36px;padding:6px 14px;border-radius:999px;border:1px solid var(--line);background:var(--bg);color:var(--ink);font-size:13px;font-weight:600;text-decoration:none;cursor:pointer}
+.pill:hover{border-color:var(--ink)}
+.pill.danger{color:var(--red)}
+.pill.danger:hover{border-color:var(--red)}
+.pill.yt{background:var(--red);border-color:var(--red);color:#fff}
+.pill.yt:hover{background:#c8141f}
+.aacts{display:flex;flex-wrap:wrap;gap:6px;margin-top:4px}
+.ameta{border-top:0;padding-top:0;margin-top:0}
+.chead{display:grid;grid-template-columns:52px minmax(0,1fr) 40px;gap:12px;align-items:center}
+.cav{width:52px;height:52px;border-radius:50%;object-fit:cover;background:var(--col);display:grid;place-items:center;font-weight:800;font-size:20px;color:var(--mute)}
+.ct b{display:block;font-size:18px;font-weight:800;line-height:1.2;overflow-wrap:anywhere}
+.ct .sub{font-size:13px}
+.star{width:40px;height:40px;border-radius:50%;border:1px solid var(--line);background:var(--bg);display:grid;place-items:center;cursor:pointer;color:var(--mute)}
+.star svg{fill:none;stroke:currentColor;stroke-width:1.8}
+.star[aria-pressed=true]{color:#f5b400;border-color:#f5b400}
+.star[aria-pressed=true] svg{fill:#f5b400}
+.mini svg{width:14px;height:14px;fill:#f5b400;stroke:none;display:block}
+.badges{display:flex;flex-wrap:wrap;gap:6px}
+.badges:empty{display:none}
+.fmt{font-size:12px;font-weight:800;letter-spacing:.02em;padding:3px 10px;border-radius:999px}
+.fs{background:color-mix(in srgb,var(--red) 16%,transparent);color:var(--red)}
+.fl{background:color-mix(in srgb,#2357ff 16%,transparent);color:light-dark(#1d44cc,#8aa6ff)}
+.pbadge{font-size:12px;font-weight:800;padding:3px 10px;border-radius:999px;background:color-mix(in srgb,#f5b400 22%,transparent);color:light-dark(#8a6400,#ffd25a)}
+.acard.prio{border-color:#f5b400;box-shadow:0 0 0 1px #f5b400}
+.cfl{margin-top:-4px}
+.avrow{display:flex;align-items:center;gap:12px;min-height:52px}
+.avrow .cav{width:52px;height:52px}
+.chk{display:flex;align-items:center;gap:8px;font-size:15px;color:var(--ink);align-self:end;min-height:44px}
+.chk input{width:20px;height:20px}
 .presets{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-top:-4px}
 .hotc[aria-pressed=true]{background:var(--red);border-color:var(--red);color:#fff}
 .chrow .chniche{grid-column:1/-1;min-height:64px}
@@ -473,14 +502,17 @@ async function putFile(fid,str){const n=Math.ceil(str.length/CHUNK);for(let i=0;
 async function getFile(a){const ps=await Promise.all(Array.from({length:a.parts||0},(_,i)=>db.collection('tasks').doc(a.fileId+'_'+i).get()));return ps.map(p=>p.exists?p.data().d:'').join('')}
 async function delFile(a){if(!a.fileId)return;const b=db.batch();for(let i=0;i<(a.parts||0);i++)b.delete(db.collection('tasks').doc(a.fileId+'_'+i));await b.commit()}
 function aFiltered(kind){const q=(UI.aq||'').trim().toLowerCase(),ch=UI.ach||'*';return AS.filter(a=>a.kind===kind&&(ch==='*'||a.ch===ch)&&(!q||[a.title,a.niche,a.style,a.note,a.url].join(' ').toLowerCase().includes(q))).sort((x,y)=>(y.at||0)-(x.at||0))}
-function aMeta(a){return `<div class="ameta">${chTag(a.ch)}<span>${esc(P(a.by)?P(a.by).name:'')}${a.at?', '+fd(ymd(new Date(a.at))):''}</span><span class="aact"><button class="lnk" data-act="aedit" data-id="${esc(a.id)}">Изменить</button><button class="lnk danger" data-act="adel" data-id="${esc(a.id)}">Удалить</button></span></div>`}
+function aMeta(a,lead){return `<div class="aacts">${lead||''}<button class="pill" data-act="aedit" data-id="${esc(a.id)}">Изменить</button><button class="pill danger" data-act="adel" data-id="${esc(a.id)}">Удалить</button></div><div class="ameta">${chTag(a.ch)}<span>${esc(P(a.by)?P(a.by).name:'')}${a.at?', '+fd(ymd(new Date(a.at))):''}</span></div>`}
 const aLink=a=>a.url&&/^https:\/\//i.test(a.url)?`<a class="alink" href="${esc(a.url)}" target="_blank" rel="noopener">${esc(host(a.url)||'ссылка')}</a>`:(a.url?`<span class="sub">${esc(a.url)}</span>`:'');
 function renderAssets(){const sub=ASUBS.some(s=>s[0]===UI.asub)?UI.asub:'scripts',chs=[['*','Все каналы',null],...S.channels.map(c=>[c.id,c.name,c.color]),['','Общее','#9aa3b2']];
  let body='';
  if(mode!=='fb')body='<p class="sub">Assets работают, когда сайт подключён к базе.</p>';
  else if(sub==='scripts')body=scriptsBody();
- else if(sub==='comp'){const L=aFiltered('competitor');body=L.length?`<div class="agrid">${L.map(a=>`<article class="acard"><div class="ah"><b>${esc(a.title)}</b>${a.subs?`<span class="sub">${esc(a.subs)}</span>`:''}</div>${aLink(a)}
-  ${a.niche?`<p><span class="k">Ниша</span>${esc(a.niche)}</p>`:''}${a.style?`<p><span class="k">Стиль</span>${esc(a.style)}</p>`:''}${a.note?`<p><span class="k">Что взять</span>${esc(a.note)}</p>`:''}${aMeta(a)}</article>`).join('')}</div>`:'<div class="empty">Пока пусто. Добавьте первого конкурента: ссылку на канал, нишу и стиль.</div>'}
+ else if(sub==='comp'){let L=aFiltered('competitor');if(UI.cprio)L=L.filter(a=>a.prio);if(UI.cfmt)L=L.filter(a=>a.format===UI.cfmt||a.format==='both');L.sort((x,y)=>(y.prio?1:0)-(x.prio?1:0));
+  const fl=`<div class="chipsrow cfl"><button class="chip" data-act="cprio" aria-pressed="${!!UI.cprio}"><span class="mini">${STAR}</span>Приоритетные</button><button class="chip" data-act="cfmt" data-id="shorts" aria-pressed="${UI.cfmt==='shorts'}">SHORTS</button><button class="chip" data-act="cfmt" data-id="long" aria-pressed="${UI.cfmt==='long'}">LONG</button></div>`;
+  body=fl+(L.length?`<div class="agrid">${L.map(a=>{const link=a.chUrl&&/^https:\/\//.test(a.chUrl)?a.chUrl:(a.url&&/^https:\/\//i.test(a.url)?a.url:'');return `<article class="acard comp${a.prio?' prio':''}"><div class="chead">${cav(a)}<div class="ct"><b>${esc(a.title)}</b>${a.subs?`<span class="sub">${esc(a.subs)} подписчиков</span>`:''}</div><button class="star" data-act="aprio" data-id="${esc(a.id)}" aria-pressed="${!!a.prio}" aria-label="Приоритетный канал" title="${a.prio?'Убрать из приоритетных':'Сделать приоритетным'}">${STAR}</button></div>
+  <div class="badges">${fmtBadge(a.format)}${a.prio?'<span class="pbadge">Приоритет</span>':''}</div>
+  ${a.niche?`<p><span class="k">Ниша</span>${esc(a.niche)}</p>`:''}${a.style?`<p><span class="k">Стиль</span>${esc(a.style)}</p>`:''}${a.note?`<p><span class="k">Что взять</span>${esc(a.note)}</p>`:''}${aMeta(a,link?`<a class="pill yt" href="${esc(link)}" target="_blank" rel="noopener">Открыть канал</a>`:'')}</article>`}).join('')}</div>`:'<div class="empty">'+(UI.cprio||UI.cfmt?'По этим фильтрам каналов нет.':'Пока пусто. Добавьте первого конкурента: вставьте ссылку на канал, аватарка подтянется сама.')+'</div>')}
  else if(sub==='inspo'){const L=aFiltered('inspo');body=`<p class="sub">Вставьте картинку или ссылку прямо на этой странице через Ctrl+V (на Mac Cmd+V) или перетащите файл сюда.</p>`+(L.length?`<div class="igrid">${L.map(a=>`<article class="icard">${okImg(a.thumb)?`<button class="ithumb" data-act="aview" data-id="${esc(a.id)}" aria-label="Открыть картинку"><img src="${a.thumb}" alt="${esc(a.title||'картинка')}" loading="lazy"></button>`:''}
   <div class="ibody">${a.title?`<b>${esc(a.title)}</b>`:''}${aLink(a)}${a.note?`<p>${esc(a.note)}</p>`:''}${aMeta(a)}</div></article>`).join('')}</div>`:'<div class="empty">Пока пусто. Вставьте сюда картинку или ссылку.</div>')}
  else{const L=aFiltered('music');body=`<p class="sub">Треки для монтажа: слушайте прямо здесь и скачивайте для CapCut или Premiere. Файл до 15 МБ, можно и просто ссылкой.</p>`+(L.length?`<div class="mlist">${L.map(a=>`<article class="mrow">${a.fileId?`<button class="play" data-act="aplay" data-id="${esc(a.id)}" aria-label="Слушать">${AUDIO[a.id]?'■':'▶'}</button>`:'<span class="play off">♪</span>'}
@@ -488,14 +520,17 @@ function renderAssets(){const sub=ASUBS.some(s=>s[0]===UI.asub)?UI.asub:'scripts
  $('#assets').innerHTML=`<div class="ahead"><h2>Assets</h2><button class="btn primary" data-act="anew">+ Добавить</button></div>
  <div class="asubs" role="tablist">${ASUBS.map(([k,n])=>`<button role="tab" data-act="asub" data-id="${k}" aria-selected="${k===sub}">${n}<span class="cnt">${AS.filter(a=>a.kind===({scripts:'script',comp:'competitor',inspo:'inspo',music:'music'})[k]).length}</span></button>`).join('')}</div>
  <div class="filters"><input id="aq" type="search" placeholder="Поиск" aria-label="Поиск по assets" value="${esc(UI.aq||'')}"><div class="chipsrow">${chs.map(([id,n,c])=>`<button class="chip" data-act="ach" data-id="${esc(id)}" aria-pressed="${(UI.ach||'*')===id}">${c?`<i class="dot" style="--c:${col(c)}"></i>`:''}${esc(n)}</button>`).join('')}</div></div>${body}`}
-function assetForm(kind,a,pre){a=a||{};pre=pre||{};APEND=pre.file?pre:null;const chSel=`<label>Наш канал<select class="inp" id="af-ch">${opt([['','Общее'],...S.channels.map(c=>[c.id,c.name])],a.ch!==undefined?a.ch:pre.ch!==undefined?pre.ch:(UI.ach&&UI.ach!=='*'?UI.ach:''))}</select></label>`;
+function assetForm(kind,a,pre){a=a||{};pre=pre||{};CAV=null;setTimeout(()=>{if(kind==='competitor'&&pre.url)lookupForm()},50);APEND=pre.file?pre:null;const chSel=`<label>Наш канал<select class="inp" id="af-ch">${opt([['','Общее'],...S.channels.map(c=>[c.id,c.name])],a.ch!==undefined?a.ch:pre.ch!==undefined?pre.ch:(UI.ach&&UI.ach!=='*'?UI.ach:''))}</select></label>`;
  const T={script:'Сценарий',competitor:'Конкурент',inspo:'Вдохновение',music:'Трек для монтажа'}[kind];let f='';
  if(kind==='script')f=`<label>Название<input class="inp" id="af-title" value="${esc(a.title||pre.title||'')}" placeholder="Например: Every US citizen does this"></label>
   <div class="grid2">${chSel}<label>Рубрика<input class="inp" id="af-rubric" list="af-rl" value="${esc(a.rubric||pre.rubric||'')}"><datalist id="af-rl">${Object.values(RUBRICS).flat().map(r=>`<option value="${esc(r)}">`).join('')}</datalist></label></div>
   <div class="grid2"><label>Статус<select class="inp" id="af-stage">${opt(STAGES.map(s=>[s[0],s[1]]),a.stage||'draft')}</select></label><label>Тема<input class="inp" id="af-topic" value="${esc(a.topic||pre.topic||'')}"></label></div>
   <label>Текст сценария<textarea class="inp stext" id="af-text" placeholder="Вставьте сюда ответ Claude целиком">${esc(a.text||'')}</textarea></label>`;
- else if(kind==='competitor')f=`<label>Название канала<input class="inp" id="af-title" value="${esc(a.title||'')}" placeholder="Например: Kurzgesagt"></label><label>Ссылка на канал<input class="inp" id="af-url" value="${esc(a.url||pre.url||'')}" placeholder="https://www.youtube.com/@…"></label>
-  <div class="grid2">${chSel}<label>Подписчики<input class="inp" id="af-subs" value="${esc(a.subs||'')}" placeholder="например, 1,2 млн"></label></div>
+ else if(kind==='competitor')f=`<label>Ссылка на канал или видео<input class="inp" id="af-url" value="${esc(a.url||pre.url||'')}" placeholder="https://www.youtube.com/@…"></label>
+  <div class="avrow"><span id="af-avbox">${okImg(a.avatar)?`<img class="cav" src="${a.avatar}" alt="">`:''}</span><span class="sub" id="af-ytst">${okImg(a.avatar)?'Аватарка уже есть. Новая ссылка подтянет новую.':'Вставьте ссылку, и аватарка с названием подтянутся сами.'}</span></div>
+  <label>Название канала<input class="inp" id="af-title" value="${esc(a.title||'')}" placeholder="Например: Kurzgesagt"></label>
+  <div class="grid2"><label>Формат<select class="inp" id="af-fmt">${opt([['','Не указан'],['shorts','SHORTS'],['long','LONG'],['both','SHORTS и LONG']],a.format||(pre.url?fmtFromUrl(pre.url):''))}</select></label><label>Подписчики<input class="inp" id="af-subs" value="${esc(a.subs||'')}" placeholder="например, 1,2 млн"></label></div>
+  <div class="grid2">${chSel}<label class="chk"><input type="checkbox" id="af-prio"${a.prio?' checked':''}> Приоритетный канал</label></div>
   <label>Ниша<input class="inp" id="af-niche" value="${esc(a.niche||'')}"></label><label>Стиль<textarea class="inp" id="af-style" placeholder="Визуал, голос, темп, превью">${esc(a.style||'')}</textarea></label><label>Что взять для нас<textarea class="inp" id="af-note">${esc(a.note||'')}</textarea></label>`;
  else if(kind==='inspo')f=`<div class="drop" id="af-drop">${okImg(pre.thumb||a.thumb)?`<img src="${pre.thumb||a.thumb}" alt="">`:'<span>Вставьте картинку (Ctrl+V), перетащите её сюда или</span>'}<label class="lnk">выберите файл<input type="file" id="af-file" accept="image/*" hidden></label></div>
   <label>Ссылка<input class="inp" id="af-url" value="${esc(a.url||pre.url||'')}" placeholder="https://…"></label><label>Подпись<input class="inp" id="af-title" value="${esc(a.title||'')}" placeholder="Что это и чем нравится"></label><label>Заметка<textarea class="inp" id="af-note">${esc(a.note||'')}</textarea></label>${chSel}`;
@@ -509,7 +544,7 @@ async function takeFile(file){const form=$('#af');if(!form||!file)return;const k
  else toast(kind==='music'?'Нужен аудиофайл':'Нужна картинка')}
 async function saveAssetForm(form){if(!db){toast('Нет связи с базой');return}const kind=form.dataset.kind,id=form.dataset.id||aUid(),old=AS.find(x=>x.id===id),btn=$('#af-save');
  const v={kind,status:'asset',title:(g('af-title')||'').trim(),url:(g('af-url')||'').trim(),note:(g('af-note')||'').trim(),ch:g('af-ch')||''};
- if(kind==='competitor'){v.niche=g('af-niche').trim();v.style=g('af-style').trim();v.subs=g('af-subs').trim()}
+ if(kind==='competitor'){v.niche=g('af-niche').trim();v.style=g('af-style').trim();v.subs=g('af-subs').trim();v.format=g('af-fmt')||'';v.prio=!!($('#af-prio')||{}).checked;if(CAV&&CAV.avatar){v.avatar=CAV.avatar;v.avatarTried=false}if(CAV&&CAV.chUrl)v.chUrl=CAV.chUrl}
  if(kind==='script'){v.rubric=g('af-rubric').trim();v.stage=g('af-stage')||'draft';v.topic=g('af-topic').trim();v.text=g('af-text');if(!v.text.trim()&&!v.topic&&!v.title){toast('Вставьте текст сценария или тему');return}if(!v.title)v.title=(v.topic||v.text.trim().split('\n')[0]||'Сценарий').slice(0,80)}
  if(kind==='competitor'&&!v.title){toast('Впишите название канала');return}
  if(kind==='inspo'&&!v.url&&!(APEND&&APEND.full)&&!(old&&old.thumb)){toast('Добавьте картинку или ссылку');return}
@@ -523,7 +558,7 @@ async function saveAssetForm(form){if(!db){toast('Нет связи с базо�
   await db.collection('tasks').doc(id).set(v,{merge:true});APEND=null;close();toast('Сохранено в Assets')}
  catch(e){console.error(e);btn.disabled=false;btn.textContent='Сохранить';toast('Не удалось сохранить, проверьте интернет')}}
 async function assetBlobURL(a){const s=await getFile(a);if(!s)throw new Error('empty');const r=await fetch(s);return URL.createObjectURL(await r.blob())}
-function startAssets(){db.collection('tasks').where('status','==','asset').onSnapshot(q=>{AS=q.docs.map(d=>Object.assign({},d.data(),{id:d.id}));if(UI.view==='assets')redraw()},e=>console.error(e))}
+function startAssets(){db.collection('tasks').where('status','==','asset').onSnapshot(q=>{AS=q.docs.map(d=>Object.assign({},d.data(),{id:d.id}));backfill();if(UI.view==='assets')redraw()},e=>console.error(e))}
 document.addEventListener('paste',async e=>{const cd=e.clipboardData;if(!cd)return;const files=[...cd.files||[]];
  if($('#af')&&!$('#modal').hidden){if(files.length){e.preventDefault();takeFile(files[0])}return}
  if(UI.view!=='assets'||!$('#modal').hidden)return;const ae=document.activeElement;if(ae&&ae.matches&&ae.matches('input,textarea'))return;
@@ -581,6 +616,34 @@ function openCols(){CL=COLS.map(c=>({id:c[0],name:c[1],color:c[2]}));modal(`<div
  <p class="sub">Переименовывайте, меняйте порядок стрелками и цвет нажатием на квадрат. «Готово» остаётся всегда: задачи в ней считаются выполненными.</p><div id="coll" class="cm"></div>
  <div><button class="btn" data-act="coladd">+ Добавить колонку</button></div><div class="acts"><button class="btn primary" data-act="colsave">Сохранить</button><button class="btn" data-act="close">Отмена</button></div></div>`);drawCols()}
 document.addEventListener('input',e=>{if(e.target.dataset.coln&&CL){CL[+e.target.dataset.coln].name=e.target.value}});
+
+/* ---- YouTube: канал, аватарка, формат ---- */
+const STAR='<svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M12 2.8l2.8 5.9 6.4.8-4.7 4.4 1.2 6.4L12 17.2l-5.7 3.1 1.2-6.4-4.7-4.4 6.4-.8z"/></svg>';
+let CAV=null,AVQ=new Set();
+const ytHandle=u=>{try{const x=new URL(u),hn=x.hostname.replace(/^(www|m)\./,'');if(hn!=='youtube.com')return null;const p=x.pathname.split('/').filter(Boolean);if(p[0]&&p[0].startsWith('@'))return decodeURIComponent(p[0]);if((p[0]==='channel'||p[0]==='c'||p[0]==='user')&&p[1])return p[1];return null}catch(e){return null}};
+const ytVideo=u=>/youtube\.com\/(shorts|watch|live)|youtu\.be\//i.test(u||'');
+const fmtFromUrl=u=>/\/shorts(\/|\?|$)/i.test(u||'')?'shorts':/\/(videos|streams)(\/|\?|$)/i.test(u||'')?'long':'';
+const chanUrl=h=>'https://www.youtube.com/'+(h.startsWith('@')?h:'channel/'+h);
+async function smallImg(blob,size){const bmp=await createImageBitmap(blob),s=Math.min(bmp.width,bmp.height),c=document.createElement('canvas');c.width=c.height=size;const x=c.getContext('2d');x.drawImage(bmp,(bmp.width-s)/2,(bmp.height-s)/2,s,s,0,0,size,size);return c.toDataURL('image/jpeg',.85)}
+async function ytInfo(u){let h=ytHandle(u),name='';
+ if(!h&&ytVideo(u)){try{const r=await fetch('https://www.youtube.com/oembed?format=json&url='+encodeURIComponent(u));if(r.ok){const j=await r.json();h=ytHandle(j.author_url||'');name=j.author_name||''}}catch(e){}}
+ if(!h)return null;let avatar='';
+ try{const r=await fetch('https://unavatar.io/youtube/'+encodeURIComponent(h.replace(/^@/,''))+'?fallback=false');if(r.ok){const b=await r.blob();if(b.type.startsWith('image/'))avatar=await smallImg(b,160)}}catch(e){}
+ return{handle:h,name,avatar,chUrl:chanUrl(h)}}
+const cav=a=>okImg(a.avatar)?`<img class="cav" src="${a.avatar}" alt="">`:`<span class="cav letter">${esc((a.title||'?').trim()[0]||'?').toUpperCase()}</span>`;
+const fmtBadge=f=>f==='shorts'?'<span class="fmt fs">SHORTS</span>':f==='long'?'<span class="fmt fl">LONG</span>':f==='both'?'<span class="fmt fs">SHORTS</span><span class="fmt fl">LONG</span>':'';
+async function lookupForm(){const u=(g('af-url')||'').trim(),st=$('#af-ytst');if(!st)return;if(!/^https?:\/\//i.test(u)){st.textContent='';return}
+ if(!$('#af-fmt').value){const f=fmtFromUrl(u);if(f)$('#af-fmt').value=f}
+ if(!/youtu/i.test(u)){st.textContent='';return}st.textContent='Ищу канал…';const info=await ytInfo(u);if(!$('#af'))return;
+ if(!info){st.textContent='Канал по ссылке не нашёл, аватаркой будет первая буква';return}
+ CAV=info;if(!g('af-title').trim())$('#af-title').value=info.name||info.handle.replace(/^@/,'');
+ $('#af-avbox').innerHTML=info.avatar?`<img class="cav" src="${info.avatar}" alt="">`:'';st.textContent=info.avatar?'Аватарка найдена: '+info.handle:'Канал '+info.handle+' найден, аватарку достать не удалось'}
+async function backfill(){if(!db)return;const todo=AS.filter(a=>a.kind==='competitor'&&!AVQ.has(a.id)&&((!a.avatar&&!a.avatarTried&&a.url)||/^(shorts|long)$/i.test(a.niche||'')||(!a.format&&fmtFromUrl(a.url)))).slice(0,6);todo.forEach(a=>AVQ.add(a.id));for(const a of todo){const up={};
+  if(/^(shorts|long)$/i.test(a.niche||'')){up.format=a.niche.toLowerCase();up.niche=''}else if(!a.format&&fmtFromUrl(a.url))up.format=fmtFromUrl(a.url);
+  if(!a.avatar&&!a.avatarTried&&a.url){const info=await ytInfo(a.url);if(info&&info.avatar)up.avatar=info.avatar;else up.avatarTried=true;if(info&&!ytHandle(a.url))up.chUrl=info.chUrl}
+  if(Object.keys(up).length)db.collection('tasks').doc(a.id).update(up).catch(()=>{})}}
+document.addEventListener('change',e=>{if(e.target.id==='af-url'&&$('#af')&&$('#af').dataset.kind==='competitor')lookupForm()});
+document.addEventListener('paste',e=>{if(e.target&&e.target.id==='af-url'&&$('#af')&&$('#af').dataset.kind==='competitor')setTimeout(lookupForm,30)});
 
 /* ---- отрисовка ---- */
 function match(t){const q=UI.q.trim().toLowerCase();return(!UI.hot||isHot(t))&&(!UI.who||has(t,UI.who))&&(UI.ch==='*'||t.ch===UI.ch)&&(!q||(t.title+' '+(t.desc||'')).toLowerCase().includes(q))}
@@ -658,6 +721,9 @@ else if(a==='ch'){UI.ch=UI.ch===id&&id!=='*'?'*':id;saveUI();render()}
 else if(a==='hot'){UI.hot=!UI.hot;saveUI();render()}
 else if(a==='new'){if(!canEdit())return;const pre={status:b.dataset.st||defSt()};if(b.dataset.who)pre.who=[b.dataset.who];openTask(null,pre)}
 else if(a==='open')openTask(id);
+else if(a==='aprio'){const x=AS.find(x=>x.id===id);if(x&&db){x.prio=!x.prio;renderAssets();db.collection('tasks').doc(id).update({prio:x.prio}).then(()=>toast(x.prio?'Канал отмечен приоритетным':'Канал больше не приоритетный')).catch(()=>toast('Не удалось сохранить'))}}
+else if(a==='cprio'){UI.cprio=!UI.cprio;saveUI();renderAssets()}
+else if(a==='cfmt'){UI.cfmt=UI.cfmt===id?'':id;saveUI();renderAssets()}
 else if(a==='cols')openCols();
 else if(a==='coladd'){CL.push({id:'c'+Date.now().toString(36),name:'Новая колонка',color:CPAL[CL.length%CPAL.length]});drawCols();const ins=document.querySelectorAll('[data-coln]');const last=ins[ins.length-1];if(last){last.focus();last.select()}}
 else if(a==='coldel'){const i=+b.dataset.i;if(CL[i]&&CL[i].id!=='done'){CL.splice(i,1);drawCols()}}
