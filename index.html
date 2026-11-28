@@ -237,6 +237,13 @@ textarea.gout{min-height:220px;font-size:14px;line-height:1.45;background:var(--
 textarea.stext{min-height:280px}
 .stextv{white-space:pre-wrap;overflow-wrap:anywhere;font:15px/1.55 Onest,system-ui,sans-serif;background:var(--col);border-radius:12px;padding:14px;margin:0;max-height:60vh;overflow:auto}
 @media(max-width:760px){.ggrid{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}.ggrid .gtopic,.ggrid .gfull{grid-column:1/-1}}
+.addcol{border:2px dashed var(--line);background:none;border-radius:16px;min-height:120px;font-weight:700;color:var(--mute);scroll-snap-align:start}
+.addcol:hover{border-color:var(--ink);color:var(--ink)}
+.colrow{display:grid;grid-template-columns:44px minmax(0,1fr) 44px 44px auto;gap:6px;align-items:center}
+.btn.ib{padding:0;width:44px;justify-content:center}
+.btn:disabled{opacity:.35;cursor:default}
+.lock{font-size:12px;color:var(--mute);white-space:nowrap;padding:0 6px}
+.warn{color:var(--red)}
 .presets{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-top:-4px}
 .hotc[aria-pressed=true]{background:var(--red);border-color:var(--red);color:#fff}
 .chrow .chniche{grid-column:1/-1;min-height:64px}
@@ -254,7 +261,7 @@ textarea.stext{min-height:280px}
 <header class="top band">
 <div class="brand"><span class="rec" aria-hidden="true"></span><h1>Доска студии</h1></div>
 <nav class="tabs" aria-label="Разделы"><button data-act="view" data-view="board">Доска задач</button><button data-act="view" data-view="team">Команда и роли</button><button data-act="view" data-view="calls">Созвоны</button><button data-act="view" data-view="assets">Assets</button><button data-act="view" data-view="guide">Работа с Claude</button></nav>
-<div class="right"><span id="online" class="online"></span><span id="sync">Подключаюсь…</span><button class="btn" id="meBtn" data-act="me">Кто я?</button><button class="btn" data-act="channels">Каналы</button><button class="btn primary" data-act="new">+ Новая задача</button></div>
+<div class="right"><span id="online" class="online"></span><span id="sync">Подключаюсь…</span><button class="btn" id="meBtn" data-act="me">Кто я?</button><button class="btn" data-act="channels">Каналы</button><button class="btn" data-act="cols">Колонки</button><button class="btn primary" data-act="new">+ Новая задача</button></div>
 </header>
 <div id="alert" class="alert band" hidden role="status"></div>
 <div id="tools"><div class="people band" id="people"></div>
@@ -299,7 +306,12 @@ const FIREBASE_CONFIG = {
 {
 const SEED=JSON.parse(document.getElementById('seed').textContent);
 let S={seedV:SEED.v,people:SEED.people,channels:SEED.channels,flow:SEED.flow,tasks:[]};
-const COLS=[['idea','Идеи','#9aa3b2'],['todo','К работе','#5d6b82'],['doing','В работе','#2357ff'],['review','На проверке','#ff8a00'],['done','Готово','#00a862']];
+const DEF_COLS=[['idea','Идеи','#9aa3b2'],['todo','К работе','#5d6b82'],['doing','В работе','#2357ff'],['done','Готово','#00a862']];
+let COLS=DEF_COLS.slice();
+const colIds=()=>COLS.map(c=>c[0]);
+const defSt=()=>colIds().includes('todo')?'todo':(COLS.find(c=>c[0]!=='done')||COLS[0])[0];
+const stOf=t=>colIds().includes(t.status)?t.status:defSt();
+function setCols(arr){const c=arr&&arr.length?arr.map(o=>[o.id,o.name,o.color]):DEF_COLS.slice();if(!c.some(x=>x[0]==='done'))c.push(['done','Готово','#00a862']);COLS=c}
 const TYPES=['Идея','Ресёрч','Сценарий','Съёмка','Озвучка','Монтаж','Превью','SEO','Публикация','Стратегия','Оформление','Настройка','ИИ','Другое'];
 const PR={3:'Высокий',2:'Средний',1:'Низкий'};
 const PAL=['#ff8a00','#00a3c4','#d4137f','#5b8c00','#6b5bff','#e5202e','#0b7a75','#b86e00'];
@@ -343,7 +355,7 @@ const GH_DATA='https://api.github.com/repos/Almaz192/studio-board/contents/data.
 let mode=(FIREBASE_CONFIG&&window.firebase)?'fb':'local',db=null,metaReady=false,tasksReady=false,migrating=false;
 const fresh=()=>({seedV:SEED.v,people:JSON.parse(JSON.stringify(SEED.people)),channels:JSON.parse(JSON.stringify(SEED.channels)),flow:JSON.parse(JSON.stringify(SEED.flow)),tasks:JSON.parse(JSON.stringify(SEED.tasks))});
 const canEdit=()=>true;
-const metaOf=x=>({seedV:SEED.v,people:x.people,channels:x.channels,flow:x.flow,calls:x.calls||DEF_CALLS});
+const metaOf=x=>({seedV:SEED.v,people:x.people,channels:x.channels,flow:x.flow,calls:x.calls||DEF_CALLS,cols:x.cols||COLS.map(c=>({id:c[0],name:c[1],color:c[2]}))});
 function fail(e){console.error(e);sync('err',String(e&&e.message||e));toast('Не удалось сохранить, проверьте интернет')}
 function change(fn,msg){const before=JSON.parse(JSON.stringify(S));fn(S);redraw();if(msg)toast(msg);
  if(mode==='local'){st('studio-board',S);sync('local');return true}
@@ -359,10 +371,10 @@ async function migrate(){if(migrating)return;migrating=true;let src=null;
  await b.commit().catch(fail)}
 function startFb(){try{firebase.initializeApp(FIREBASE_CONFIG);db=firebase.firestore()}catch(e){console.error(e);mode='local';startLocal();return}
  sync('load');S=fresh();S.tasks=[];render();
- db.collection('studio').doc('meta').onSnapshot(s=>{if(!s.exists){migrate();return}const d=s.data();S.people=d.people||[];S.channels=d.channels||[];S.flow=d.flow||[];S.calls=d.calls||DEF_CALLS;S.poll=d.poll||null;metaReady=true;redraw();maybePoll()},fail);
+ db.collection('studio').doc('meta').onSnapshot(s=>{if(!s.exists){migrate();return}const d=s.data();S.people=d.people||[];S.channels=d.channels||[];S.flow=d.flow||[];setCols(d.cols);S.cols=d.cols||null;S.calls=d.calls||DEF_CALLS;S.poll=d.poll||null;metaReady=true;redraw();maybePoll()},fail);
  db.collection('studio').doc('presence').onSnapshot(s=>{PRES=s.exists?s.data({serverTimestamps:'estimate'}):{};redraw()},()=>{});beat(true);
  startAssets();
- db.collection('tasks').where('status','in',COLS.map(c=>c[0])).onSnapshot({includeMetadataChanges:true},q=>{S.tasks=q.docs.map(d=>Object.assign({comments:[]},d.data(),{id:d.id}));tasksReady=true;sync(q.metadata.hasPendingWrites?'pend':'ok');redraw()},fail)}
+ db.collection('tasks').where('status','not-in',['asset','file']).onSnapshot({includeMetadataChanges:true},q=>{S.tasks=q.docs.map(d=>Object.assign({comments:[]},d.data(),{id:d.id}));tasksReady=true;sync(q.metadata.hasPendingWrites?'pend':'ok');redraw()},fail)}
 function startLocal(){const L=st('studio-board');if(L&&L.tasks&&(L.seedV||1)>=SEED.v)S=L;else{S=fresh();st('studio-board',S)}
  S.calls=S.calls||DEF_CALLS;$('#banner').innerHTML='<b>База не подключена.</b> Задачи сохраняются только в этом браузере.';$('#banner').hidden=false;sync('local');render();maybePoll()}
 function redraw(){const ae=document.activeElement;if((UI.view==='team'||UI.view==='assets')&&ae&&ae.closest&&ae.closest('#team,#assets')&&ae.matches('input,textarea,select')){dirtyTeam=true;renderBoardSide();return}render();
@@ -558,12 +570,24 @@ document.addEventListener('change',e=>{const el=e.target;
  if(el.dataset.gen){UI.gen=Object.assign(GEN(),{[el.dataset.gen]:el.value});if(el.dataset.gen==='ch')UI.gen.rubric='';saveUI();if(el.dataset.gen==='ch')renderAssets();else $('#g-out').value=buildPrompt(GEN())}
  else if(el.dataset.sstage&&db){db.collection('tasks').doc(el.dataset.sstage).update({stage:el.value}).then(()=>toast('Статус сценария обновлён')).catch(()=>toast('Не удалось сохранить'))}});
 document.addEventListener('input',e=>{const el=e.target;if(el.dataset.gen&&el.tagName==='INPUT'){UI.gen=Object.assign(GEN(),{[el.dataset.gen]:el.value});saveUI();const o=$('#g-out');if(o)o.value=buildPrompt(GEN())}});
+/* ---- колонки доски ---- */
+let CL=null;const CPAL=['#9aa3b2','#5d6b82','#2357ff','#ff8a00','#6b5bff','#d4137f','#00a3c4','#e5202e','#00a862'];
+function drawCols(){const moved=S.tasks.filter(t=>!CL.some(c=>c.id===t.status)).length,fb=(CL.find(c=>c.id!=='done')||CL[0]||{}).name;
+ $('#coll').innerHTML=CL.map((c,i)=>`<div class="colrow"><button type="button" class="sw" style="--c:${col(c.color)}" data-act="colsw" data-i="${i}" aria-label="Сменить цвет колонки"></button><input class="inp" data-coln="${i}" value="${esc(c.name)}" aria-label="Название колонки">
+ <button type="button" class="btn ib" data-act="colup" data-i="${i}" aria-label="Выше"${i===0?' disabled':''}>↑</button><button type="button" class="btn ib" data-act="coldown" data-i="${i}" aria-label="Ниже"${i===CL.length-1?' disabled':''}>↓</button>
+ ${c.id==='done'?'<span class="lock" title="По этой колонке сайт понимает, что задача выполнена">Нельзя удалить</span>':`<button type="button" class="btn" data-act="coldel" data-i="${i}">Убрать</button>`}</div>`).join('')+
+ (moved?`<p class="sub warn">Из убранных колонок ${plural(moved,['переедет','переедут','переедут'])} ${moved} ${plural(moved,['задача','задачи','задач'])} в «${esc(fb||'')}».</p>`:'')}
+function openCols(){CL=COLS.map(c=>({id:c[0],name:c[1],color:c[2]}));modal(`<div class="wrap"><div class="mh"><h2>Колонки доски</h2><button class="x" data-act="close" aria-label="Закрыть">×</button></div>
+ <p class="sub">Переименовывайте, меняйте порядок стрелками и цвет нажатием на квадрат. «Готово» остаётся всегда: задачи в ней считаются выполненными.</p><div id="coll" class="cm"></div>
+ <div><button class="btn" data-act="coladd">+ Добавить колонку</button></div><div class="acts"><button class="btn primary" data-act="colsave">Сохранить</button><button class="btn" data-act="close">Отмена</button></div></div>`);drawCols()}
+document.addEventListener('input',e=>{if(e.target.dataset.coln&&CL){CL[+e.target.dataset.coln].name=e.target.value}});
+
 /* ---- отрисовка ---- */
 function match(t){const q=UI.q.trim().toLowerCase();return(!UI.hot||isHot(t))&&(!UI.who||has(t,UI.who))&&(UI.ch==='*'||t.ch===UI.ch)&&(!q||(t.title+' '+(t.desc||'')).toLowerCase().includes(q))}
 function card(t){const n=(t.comments||[]).length;
 const ht=heat(t);return `<article class="card${t.status==='done'?' done':''}${ht?' '+ht:''}" draggable="true" tabindex="0" data-id="${esc(t.id)}"><div class="meta">${chTag(t.ch)}<span>${esc(t.type)}</span>${prio(t.prio)}</div>${ht?`<div class="nudge">${esc(pick(ht==='fire'?NUDGE_LATE:NUDGE_TODAY,t.id))}</div>`:''}<h3>${esc(t.title)}</h3>${(()=>{const b=blocker(t);return b?`<div class="wait">После: ${esc(short(b.title))}</div>`:''})()}<div class="foot">${whoAv(t)}<span>${esc(whoName(t))}</span>${n?`<span>${n} комм.</span>`:''}${dueTxt(t)}</div></article>`}
-function renderBoard(){$('#board').innerHTML=COLS.map(([k,name,c])=>{const ts=S.tasks.filter(t=>t.status===k&&match(t)).sort((a,b)=>a.order-b.order);
-return `<section class="col" data-col="${k}"><div class="colh"><i class="st" style="--c:${c}"></i><h2>${name}</h2><span class="cnt">${ts.length}</span><button class="add" data-act="new" data-st="${k}" aria-label="Добавить задачу в колонку ${name}">+</button></div>${ts.map(card).join('')||'<div class="empty">Перетащите сюда задачу</div>'}</section>`}).join('')}
+function renderBoard(){$('#board').innerHTML=COLS.map(([k,name,c])=>{const ts=S.tasks.filter(t=>stOf(t)===k&&match(t)).sort((a,b)=>a.order-b.order);
+return `<section class="col" data-col="${k}"><div class="colh"><i class="st" style="--c:${c}"></i><h2>${name}</h2><span class="cnt">${ts.length}</span><button class="add" data-act="new" data-st="${k}" aria-label="Добавить задачу в колонку ${name}">+</button></div>${ts.map(card).join('')||'<div class="empty">Перетащите сюда задачу</div>'}</section>`}).join('')+'<button class="addcol" data-act="cols">+ Колонка</button>'}
 function renderPeople(){const n=S.people.length;
 $('#people').innerHTML=`<button class="pchip" data-act="who" data-id="" aria-pressed="${!UI.who}"><span class="av lg" style="--c:#5d6b82">${n}</span><span><b>Вся команда</b><small>${n} ${plural(n,['человек','человека','человек'])}</small></span></button>`+S.people.map(p=>{const k=S.tasks.filter(t=>has(t,p.id)&&t.status!=='done').length;
 return `<button class="pchip" data-act="who" data-id="${esc(p.id)}" aria-pressed="${UI.who===p.id}" title="${esc(seenTxt(p.id))}">${avOn(p,'lg')}<span><b>${esc(p.name)}${p.id===me?' (я)':''}</b><small>${esc(p.role)}</small></span><span class="n" title="Открытых задач">${k}</span></button>`}).join('')}
@@ -572,7 +596,7 @@ const hot=S.tasks.filter(isHot).length;
 $('#chips').innerHTML=`<button class="chip hotc" data-act="hot" aria-pressed="${UI.hot}">Горят сроки: ${hot}</button>`+chs.map(([id,n,c])=>`<button class="chip" data-act="ch" data-id="${esc(id)}" aria-pressed="${UI.ch===id}">${c?`<i class="dot" style="--c:${col(c)}"></i>`:''}${esc(n)}</button>`).join('')}
 function renderTeam(){
 const flow=`<section class="flow"><h2>Как ролик проходит через команду</h2><p class="sub">У каждого этапа есть ответственный. Договоритесь иначе — поменяйте здесь.</p><div class="steps">${S.flow.map((f,i)=>`<div class="step"><div class="sh">${av(P(f.who),'lg')}<span>${esc(f.step)}</span></div><select class="inp" data-flow="${i}" aria-label="Ответственный: ${esc(f.step)}">${S.people.map(p=>`<option value="${esc(p.id)}"${p.id===f.who?' selected':''}>${esc(p.name)}</option>`).join('')}</select></div>`).join('')}</div></section>`;
-const cards=S.people.map(p=>{const mine=S.tasks.filter(t=>has(t,p.id)),cnt=COLS.map(([k])=>mine.filter(t=>t.status===k).length),tot=mine.length||1,open=mine.filter(t=>t.status!=='done').sort((a,b)=>(a.due||'9')<(b.due||'9')?-1:1);
+const cards=S.people.map(p=>{const mine=S.tasks.filter(t=>has(t,p.id)),cnt=COLS.map(([k])=>mine.filter(t=>stOf(t)===k).length),tot=mine.length||1,open=mine.filter(t=>t.status!=='done').sort((a,b)=>(a.due||'9')<(b.due||'9')?-1:1);
 return `<section class="pcard"><div class="ph">${avOn(p,'xl')}<div><b>${esc(p.name)}${p.id===me?' (я)':''}</b><span class="seen${isOn(p.id)?' is-on':''}">${esc(seenTxt(p.id))}</span><span class="sub">${mine.length} ${plural(mine.length,['задача','задачи','задач'])}, открыто ${open.length}</span></div></div>
 <label>Роли<input class="inp" data-role="${esc(p.id)}" value="${esc(p.role)}"></label>
 <label>Зона ответственности<textarea class="inp" data-duties="${esc(p.id)}">${esc(p.duties)}</textarea></label>
@@ -594,7 +618,7 @@ const opt=(arr,v)=>arr.map(([k,n])=>`<option value="${esc(k)}"${String(k)===Stri
 const cmHtml=t=>(t.comments||[]).map(c=>`<div class="cmi"><div class="w">${av(P(c.by))}<b>${esc(P(c.by)?P(c.by).name:'Кто-то')}</b><span>${esc(fdt(c.at))}</span></div><p>${esc(c.text)}</p></div>`).join('')||'<p class="sub">Пока нет комментариев</p>';
 function refreshComments(t){const el=$('#cml');if(el)el.innerHTML=cmHtml(t)}
 function openTask(id,preset){
-const t=id?T(id):Object.assign({id:'',title:'',desc:'',who:me?[me]:[],ch:UI.ch==='*'?'':UI.ch,type:'Другое',prio:2,due:'',status:'todo',comments:[]},preset||{});
+const t=id?T(id):Object.assign({id:'',title:'',desc:'',who:me?[me]:[],ch:UI.ch==='*'?'':UI.ch,type:'Другое',prio:2,due:'',status:defSt(),comments:[]},preset||{});
 if(!t)return;
 modal(`<form id="tf" data-id="${esc(t.id)}"><div class="mh"><h2>${id?'Задача':'Новая задача'}</h2><button type="button" class="x" data-act="close" aria-label="Закрыть">×</button></div>
 <label>Название<input class="inp ttl" id="f-title" value="${esc(t.title)}" placeholder="Например: смонтировать первый ролик"${id?'':' autofocus'}></label>
@@ -602,7 +626,7 @@ modal(`<form id="tf" data-id="${esc(t.id)}"><div class="mh"><h2>${id?'Задач
 <div class="grid3"><div class="span3"><span class="flabel">Исполнители</span><div class="whopick" id="f-who">${S.people.map(p=>`<button type="button" class="wp" data-act="wp" data-id="${esc(p.id)}" aria-pressed="${has(t,p.id)}">${av(p)}${esc(p.name)}</button>`).join('')}<button type="button" class="wp all" data-act="wpall">Вся команда</button></div></div>
 <label>Канал<select class="inp" id="f-ch">${opt([['','Общее'],...S.channels.map(c=>[c.id,c.name])],t.ch)}</select></label>
 <label>Тип<select class="inp" id="f-type">${opt(TYPES.map(x=>[x,x]),t.type)}</select></label>
-<label>Статус<select class="inp" id="f-st">${opt(COLS,t.status)}</select></label>
+<label>Статус<select class="inp" id="f-st">${opt(COLS,stOf(t))}</select></label>
 <label>Приоритет<select class="inp" id="f-pr">${opt([[3,'Высокий'],[2,'Средний'],[1,'Низкий']],t.prio)}</select></label>
 <label>Дедлайн<input class="inp" type="date" id="f-due" value="${esc(t.due)}"></label>
 <label>Время<input class="inp" type="time" id="f-time" value="${esc(t.dueTime||'')}"></label>
@@ -632,8 +656,15 @@ if(a==='view'){UI.view=b.dataset.view;saveUI();render()}
 else if(a==='who'){UI.who=UI.who===id?'':id;saveUI();render()}
 else if(a==='ch'){UI.ch=UI.ch===id&&id!=='*'?'*':id;saveUI();render()}
 else if(a==='hot'){UI.hot=!UI.hot;saveUI();render()}
-else if(a==='new'){if(!canEdit())return;const pre={status:b.dataset.st||'todo'};if(b.dataset.who)pre.who=[b.dataset.who];openTask(null,pre)}
+else if(a==='new'){if(!canEdit())return;const pre={status:b.dataset.st||defSt()};if(b.dataset.who)pre.who=[b.dataset.who];openTask(null,pre)}
 else if(a==='open')openTask(id);
+else if(a==='cols')openCols();
+else if(a==='coladd'){CL.push({id:'c'+Date.now().toString(36),name:'Новая колонка',color:CPAL[CL.length%CPAL.length]});drawCols();const ins=document.querySelectorAll('[data-coln]');const last=ins[ins.length-1];if(last){last.focus();last.select()}}
+else if(a==='coldel'){const i=+b.dataset.i;if(CL[i]&&CL[i].id!=='done'){CL.splice(i,1);drawCols()}}
+else if(a==='colup'||a==='coldown'){const i=+b.dataset.i,j=a==='colup'?i-1:i+1;if(j>=0&&j<CL.length){[CL[i],CL[j]]=[CL[j],CL[i]];drawCols()}}
+else if(a==='colsw'){const c=CL[+b.dataset.i];c.color=CPAL[(CPAL.indexOf(c.color)+1)%CPAL.length];drawCols()}
+else if(a==='colsave'){const L=CL.map(c=>({id:c.id,name:(c.name||'').trim()||'Без названия',color:col(c.color)}));if(!L.some(c=>c.id==='done'))L.push({id:'done',name:'Готово',color:'#00a862'});const ids=L.map(c=>c.id),fb=(L.find(c=>c.id!=='done')||L[0]).id;
+ setCols(L);close();change(x=>{x.cols=JSON.parse(JSON.stringify(L));x.tasks.forEach(t=>{if(!ids.includes(t.status))t.status=fb})},'Колонки сохранены')}
 else if(a==='gbuild'){$('#g-out').value=buildPrompt(GEN());toast('Запрос собран')}
 else if(a==='gcopy'){const t=buildPrompt(GEN());$('#g-out').value=t;(navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).then(()=>toast('Запрос скопирован, вставьте его в Claude')).catch(()=>{const o=$('#g-out');o.focus();o.select();toast('Выделил текст, нажмите Ctrl+C')})}
 else if(a==='gopen'){window.open('https://claude.ai/new?q='+encodeURIComponent(buildPrompt(GEN())),'_blank','noopener')}
@@ -641,7 +672,7 @@ else if(a==='gapp'){location.href='claude://claude.ai/new?q='+encodeURIComponent
 else if(a==='gsave'){const g=GEN();assetForm('script',null,{ch:g.ch,rubric:g.rubric,topic:g.topic,title:g.topic})}
 else if(a==='sview'){const x=AS.find(x=>x.id===id);if(!x)return;modal(`<div class="wrap"><div class="mh"><h2>${esc(x.title)}</h2><button class="x" data-act="close" aria-label="Закрыть">×</button></div><div class="srow">${chTag(x.ch)}${x.rubric?`<span class="sub">${esc(x.rubric)}</span>`:''}${x.topic?`<span class="sub">Тема: ${esc(x.topic)}</span>`:''}</div><pre class="stextv">${esc(x.text||'Текст пока не вставлен')}</pre><div class="acts"><button class="btn primary" data-act="scopy" data-id="${esc(x.id)}">Скопировать текст</button><button class="btn" data-act="aedit" data-id="${esc(x.id)}">Изменить</button></div></div>`)}
 else if(a==='scopy'){const x=AS.find(x=>x.id===id);if(x&&navigator.clipboard)navigator.clipboard.writeText(x.text||'').then(()=>toast('Текст скопирован')).catch(()=>toast('Не удалось скопировать'))}
-else if(a==='stask'){const x=AS.find(x=>x.id===id);if(!x)return;const nid=uid();change(s=>{s.tasks.push({id:nid,title:'Видео: '+x.title,desc:'Сценарий лежит в Assets → Сценарии: «'+x.title+'».'+(x.rubric?' Рубрика: '+x.rubric+'.':''),who:[],ch:x.ch||'',type:'Монтаж',prio:2,due:'',dueTime:'',after:'',status:'todo',comments:[],created:TODAY,by:me||'',order:maxOrderIn(s,'todo',nid)+1})},'Задача создана на доске в колонке «К работе»')}
+else if(a==='stask'){const x=AS.find(x=>x.id===id);if(!x)return;const nid=uid();change(s=>{s.tasks.push({id:nid,title:'Видео: '+x.title,desc:'Сценарий лежит в Assets → Сценарии: «'+x.title+'».'+(x.rubric?' Рубрика: '+x.rubric+'.':''),who:[],ch:x.ch||'',type:'Монтаж',prio:2,due:'',dueTime:'',after:'',status:defSt(),comments:[],created:TODAY,by:me||'',order:maxOrderIn(s,'todo',nid)+1})},'Задача создана на доске в колонке «К работе»')}
 else if(a==='asub'){UI.asub=id;saveUI();render()}
 else if(a==='ach'){UI.ach=(UI.ach||'*')===id&&id!=='*'?'*':id;saveUI();render()}
 else if(a==='anew'){const s=UI.asub||'scripts';assetForm(s==='scripts'?'script':s==='comp'?'competitor':s==='music'?'music':'inspo')}
